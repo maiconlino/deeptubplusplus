@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 import pandas as pd
 import numpy as np
@@ -113,6 +114,6 @@ def usuarios(nome_usuario):
     return nome_usuario
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
 
 
