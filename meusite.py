@@ -15,11 +15,11 @@ app = Flask(__name__)
 #template 
 
 
-loaded_model = pickle.load(open('../SVM03-11-2022_02-50-37.sav','rb'))
-scalerfile = '../scaler2_03-19-2022_02-19-47.pkl'
+loaded_model = pickle.load(open('SVM03-11-2022_02-50-37.sav','rb'))
+scalerfile = 'scaler2_03-19-2022_02-19-47.pkl'
 scaler = load(open(scalerfile, 'rb'))
-X_train = pd.read_csv('../X_trainLIME_03-19-2022_03-59-34.csv', sep=';', index_col=False)
-Y_train = pd.read_csv('../Y_trainLIME_03-19-2022_03-59-34.csv', sep=';', index_col=False)
+X_train = pd.read_csv('X_trainLIME_03-19-2022_03-59-34.csv', sep=';', index_col=False)
+Y_train = pd.read_csv('Y_trainLIME_03-19-2022_03-59-34.csv', sep=';', index_col=False)
 
 colunas = ('NU_IDADE_N','TRATAMENTO','RAIOX_TORA','TESTE_TUBE','FORMA','AGRAVDOENC','BACILOSC_E','BACILOS_E2','HIV','BACILOSC_6','DIAS')
 prognosis = ''
