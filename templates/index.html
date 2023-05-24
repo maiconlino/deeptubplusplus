@@ -111,18 +111,40 @@
           </div><!--End Icon Box -->
 
           <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="icon-box">
+            <div class="icon-box" style="background-color: #d7bab7;">
               <div class="icon"><i class="bi bi-diagram-3"></i></div>
-              <h4 class="title"><a href="#" class="stretched-link">Acompanhamento</a></h4>
+              <h4 class="title">
+                <a href="#" class="stretched-link" onmouseover="changeContent(this)" onmouseout="restoreContent(this)">Acompanhamento</a>
+              </h4>
             </div>
           </div><!--End Icon Box -->
-
+          
           <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="icon-box">
+            <div class="icon-box" style="background-color: #d7bab7;">
               <div class="icon"><i class="bi bi-table"></i></div>
-              <h4 class="title"><a href="#" class="stretched-link">Visualização</a></h4>
+              <h4 class="title">
+                <a href="#" class="stretched-link" onmouseover="changeContent(this)" onmouseout="restoreContent(this)">Visualização</a>
+              </h4>
             </div>
           </div><!--End Icon Box -->
+          
+          <script>
+            function changeContent(element) {
+              // Armazena o conteúdo original
+              element.dataset.originalContent = element.innerHTML;
+            
+              // Altera o texto do link para "Em construção" com o ícone de construção
+              element.innerHTML = '<i class="bi bi-tools"></i> Em construção';
+            }
+            
+            function restoreContent(element) {
+              // Restaura o conteúdo original
+              element.innerHTML = element.dataset.originalContent;
+            }
+            </script>
+            
+          
+          
 
           <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
             <div class="icon-box">
