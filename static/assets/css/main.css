@@ -20,7 +20,7 @@
 /* Colors */
 :root {
   --color-default: #222222;
-  --color-primary: #c3766b;
+  --color-primary: #c78c83;
   --color-secondary: #d6ae99;
 }
 
@@ -428,7 +428,7 @@ section {
     font-size: 15px;
     text-transform: none;
     font-weight: 600;
-    color: #006a5d;
+    color: #d6ae99;
   }
 
   .navbar .dropdown ul a i {
@@ -499,7 +499,7 @@ section {
     inset: 0;
     padding: 50px 0 10px 0;
     margin: 0;
-    background: rgba(0, 131, 116, 0.9);
+    background: #d6ae99;
     overflow-y: auto;
     transition: 0.3s;
     z-index: 9998;
@@ -996,7 +996,7 @@ section {
 }
 
 .services .service-item:hover .icon:before {
-  background: #00b6a1;
+  background: #d6ae99;
 }
 
 .services .service-item:hover h3 {
@@ -1050,7 +1050,7 @@ section {
 
 .testimonials .testimonial-item .quote-icon-left,
 .testimonials .testimonial-item .quote-icon-right {
-  color: #009d8b;
+  color: #d6ae99;
   font-size: 26px;
   line-height: 0;
 }
@@ -1293,7 +1293,7 @@ section {
 }
 
 .portfolio-details .portfolio-info .btn-visit:hover {
-  background: #009d8b;
+  background: #d6ae99;
 }
 
 .portfolio-details .portfolio-description h2 {
@@ -1884,9 +1884,30 @@ section {
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 20px;
+  color: #fff; 
+}
+
+h3 {
+  font-size: 20px;
+  /*font-weight: 700;*/
+  margin-bottom: 20px;
   color: #fff;
 }
 
+h5 {
+  text-align: right;
+  font-size: 20px;
+  /*font-weight: 700;*/
+  margin-bottom: 20px;
+  color: #593734;
+}
+
+#tituloFormulario {
+  font-size: 30px;
+  /*font-weight: 700;*/
+  margin-bottom: 20px;
+  color: #593734;
+}
 .hero p {
   color: rgba(255, 255, 255, 0.6);
   font-weight: 400;
@@ -1963,7 +1984,7 @@ section {
   padding: 60px 30px;
   position: relative;
   overflow: hidden;
-  background: #d6ae99;
+  background: #593734;
   box-shadow: 0 0 29px 0 rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease-in-out;
   border-radius: 8px;

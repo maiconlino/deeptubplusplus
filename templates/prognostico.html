@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>DeepTub++ - Plataforma para o acompanhamento do prognóstico da tuberculose</title>
+  <title>TITO - Tuberculosis Intelligent TechnolOgy</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -24,6 +24,7 @@
   <link href="static/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
   <!-- Template Main CSS File -->
   <link href="static/assets/css/main.css" rel="stylesheet">
@@ -40,10 +41,60 @@
         background: #bb6054;
         }
     </style>
-    
+    <script>
+      // Função para exibir a modal de carregamento
+function exibirModalCarregamento() {
+    $('#loadingModal').modal('show');
+}
+
+// Função para ocultar a modal de carregamento
+function ocultarModalCarregamento() {
+    $('#loadingModal').modal('hide');
+}
+
+// Função para submeter o formulário
+function submeterFormulario() {
+    exibirModalCarregamento();
+
+    // Aguardar um breve período para exibir a modal de carregamento antes de enviar o formulário
+    setTimeout(function() {
+        $('#FORMULARIOPROGNOSTICO').submit();
+    }, 500); // Ajuste o tempo de espera (em milissegundos) conforme necessário
+}
+
+    </script>
 </head>
 
 <body>
+
+
+<!-- Modal de carregamento -->
+<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loadingModalLabel">Aguarde...</h5>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="fa fa-spinner fa-spin fa-3x"></i>
+                    <p>Estamos usando <strong>inteligência artificial</strong> para prever o prognóstico da tuberculose, por favor aguarde.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
 
   <!-- ======= Header ======= -->
   <section id="topbar" class="topbar d-flex align-items-center">
@@ -52,10 +103,7 @@
         <i class="d-flex align-items-center">dotLab Brazil</i>
       </div>
       <div class="social-links d-none d-md-flex align-items-center">
-        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></i></a>
+        <a href="https://www.instagram.com/dotlabbrazil/" class="instagram"><i class="bi bi-instagram"></i></a>
       </div>
     </div>
   </section><!-- End Top Bar -->
@@ -66,16 +114,13 @@
       <a href="/" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="static/assets/img/logo.png" alt=""> -->
-        <img src="static/img/logodeeptub.jpeg" />
+        <img src="static/img/logotito.png" />
       </a>
       <nav id="navbar" class="navbar">
         <ul>
           <li><a href="/">Início</a></li>
           <li><a href="/#about">Sobre</a></li>
-          <li><a href="/#team">Time</a></li>
           <li><a href="/#faq">Perguntas frequentes</a></li>
-          <li><a href="/prognostico">Prognóstico</a></li>
-          <li><a href="#portfolio">Acompanhamento</a></li>
         </ul>
       </nav><!-- .navbar -->
 
@@ -91,8 +136,8 @@
     <div class="container position-relative">
       <div class="row gy-5" data-aos="fade-in">
         <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center text-center text-lg-start">
-          <h2>DeepTub++<span> Prognóstico</span></h2>
-          <p>Preencha abaixo os onze atributos com os dados do paciente e veja o resultado do prongóstico da tuberculose</i>.          </p>
+          <h2>TITO<span> Prognóstico</span></h2>
+          <p>Preencha abaixo os onze atributos com os dados do paciente e veja o resultado do prognóstico da tuberculose</i>.          </p>
           <div style="text-align: center;">
                 <i class="bi bi-speedometer2" style="font-size: 10rem; color: #fcf5f1;"></i>
           </div>
@@ -122,47 +167,51 @@
  <!-- ======= About Us Section ======= -->
  <section id="about" class="about">
     <div class="container" data-aos="fade-up">
-
-        <h2>Preencha os dados do paciente</h2>
-        <form class="form-control" action="/prognostico_form" method="POST">
-
-
-
-
-            <div class="input-group input-group-lg">
-                <span class="input-group-text" id="inputGroup-sizing-lg">Idade</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="30" id="form_idade_do_paciente" name="form_idade_do_paciente" required>
-                <input type="range" class="form-range custom-range" value="30" min="0" max="130" step="1" id="var_idade" oninput="document.getElementById('form_idade_do_paciente').value = this.value">
+      
+        <h2 id="tituloFormulario">Preencha os dados do paciente</h2>
+        <form action="/prognostico_form" method="POST" id="FORMULARIOPROGNOSTICO"> 
+          <div id="first-screen">
+                  <div class="form-group row">
+                    <label for="form_idade_do_paciente" class="col-sm-4 col-form-label"><h5>Idade:</h5></label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control form-control-lg" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="30" id="form_idade_do_paciente" name="form_idade_do_paciente" required>
+                      <input type="range" class="form-range custom-range" value="30" min="0" max="130" step="1" id="var_idade" oninput="document.getElementById('form_idade_do_paciente').value = this.value">
+                    </div>
+                  </div>
+              
+                  <div class="form-group row">
+                    <label for="form_tipo_de_tratamento" class="col-sm-4 col-form-label"><h5>Tipo de entrada no tratamento:</h5></label>
+                    <div class="col-sm-8">
+                      <select class="form-select form-control-lg" id="form_tipo_de_tratamento" name="form_tipo_de_tratamento" required>
+                        <option selected disabled value="">selecione...</option>
+                        <option value="1">1. Caso novo</option>
+                        <option value="2">2. Recidiva</option>
+                        <option value="3">3. Reingresso após abandono</option>
+                        <option value="4">4. Não sabe</option>
+                        <option value="5">5.Transferência</option>
+                        <option value="6">6. Pós-óbito</option>
+                      </select>
+                    </div>
+                  </div>
+              
+                  <div class="form-group row">
+                  <label  for="form_radiografia_torax" class="col-sm-4 col-form-label"><h5>Radiografia do Tórax:</h5></label>
+                  <div class="col-sm-8">
+                  <select class="form-select form-control-lg" id="form_radiografia_torax" name="form_radiografia_torax" required>
+                    <option selected disabled value="">selecione...</option>
+                    <option value="1">1. Suspeito</option>
+                    <option value="2">2. Normal</option>
+                    <option value="3">3. Outra patologia</option>
+                    <option value="4">4. Não realizado</option>
+                  </select>
+                  </div>
               </div>
-
-              <div class="input-group mb-3 input-group-lg">
-                <label class="input-group-text" for="form_tipo_de_tratamento">Tipo de entrada no tratamento
-                </label>
-                <select class="form-select" id="form_tipo_de_tratamento" name="form_tipo_de_tratamento" required>
-                  <option selected disabled value="">selecione...</option>
-                  <option value="1">1. Caso novo</option>
-                  <option value="2">2. Recidiva</option>
-                  <option value="3">3. Reingresso após abandono</option>
-                  <option value="4">4. Não sabe</option>
-                  <option value="5">5.Transferência</option>
-                  <option value="6">6. Pós-óbito</option>
-                </select>
-
-                <label class="input-group-text" for="form_radiografia_torax">Radiografia do Tórax
-                </label>
-                <select class="form-select" id="form_radiografia_torax" name="form_radiografia_torax" required>
-                  <option selected disabled value="">selecione...</option>
-                  <option value="1">1. Suspeito</option>
-                  <option value="2">2. Normal</option>
-                  <option value="3">3. Outra patologia</option>
-                  <option value="4">4. Não realizado</option>
-                </select>
-              </div>
+             
 
 
-              <div class="input-group mb-3 input-group-lg">
-                <label class="input-group-text" for="form_teste_tuberculinio">Teste tuberculíneo
-                </label>
+              <div class="form-group row">
+                <label for="form_teste_tuberculinio" class="col-sm-4 col-form-label"><h5>Teste tuberculíneo:</h5></label>
+                <div class="col-sm-8">
                 <select class="form-select" id="form_teste_tuberculinio" name="form_teste_tuberculinio" required>
                   <option selected disabled value="">selecione...</option>
                   <option value="1">1. Não reator</option>
@@ -170,29 +219,48 @@
                   <option value="3">3. Reator forte</option>
                   <option value="4">4. Não realizado</option>
                 </select>
+              </div>
+              </div>
 
-                <label class="input-group-text" for="form_forma_da_tuberculose">Forma da tuberculose
-                </label>
+              <div class="form-group row">
+                <label for="form_forma_da_tuberculose" class="col-sm-4 col-form-label"><h5>Forma da tuberculose:</h5></label>
+                <div class="col-sm-8">
                 <select class="form-select" id="form_forma_da_tuberculose" name="form_forma_da_tuberculose" required>
                   <option selected disabled value="">selecione...</option>
                   <option value="1">1. Pulmonar</option>
                   <option value="2">2. Extrapulmonar</option>
                   <option value="3">3. Pulmonar + Extrapulmonar</option>
                 </select>
+                </div>
               </div>
               
-              <div class="input-group mb-3 input-group-lg">
-                <label class="input-group-text" for="form_agravos_doenca_mental">Agravos associados a doença Mental
-                </label>
+              
+              <div class="form-group row">
+                <label  for="form_agravos_doenca_mental" class="col-sm-4 col-form-label"><h5>Agravos associados a doença Mental:</h5></label>
+                <div class="col-sm-8">
                 <select class="form-select" id="form_agravos_doenca_mental" name="form_agravos_doenca_mental" required>
                   <option selected disabled value="">selecione...</option>
                   <option value="1">1. Sim</option>
                   <option value="2">2. Não</option>
                   <option value="3">3. Ignorado</option>
                 </select>
+              </div>
+                </div>
+                <div class="form-group row">
+                  <!-- Elemento de alerta -->
+                  <div id="alert-message" class="alert alert-danger" style="display: none;"></div>
+                  <div class="col-md-6 offset-md-3 text-center">
+                    <button class="btn next-btn" type="button" style="background-color: #ebb5ae;">Próxima <i class="bi bi-arrow-bar-right"></i></button>
+                  </div>
+                </div>
+                
+              </div>
 
-                <label class="input-group-text" for="form_hiv">Resultado do teste de HIV
-                </label>
+              <div id="second-screen" style="display: none;">
+
+                <div class="form-group row">
+                <label for="form_hiv" class="col-sm-4 col-form-label"><h5>Resultado do teste de HIV:</h5></label>
+                <div class="col-sm-8">
                 <select class="form-select" id="form_hiv" name="form_hiv" required>
                   <option selected disabled value="">selecione...</option>
                   <option value="1">1. Positivo</option>
@@ -201,10 +269,12 @@
                   <option value="4">4. Não se aplica</option>
                 </select>
               </div>
+                </div>
+              
 
-              <div class="input-group mb-3 input-group-lg">
-                <label class="input-group-text" for="form_bacilosc_e">Baciloscopia de escarro – 1ª amostra
-                </label>
+                <div class="form-group row">
+                <label for="form_bacilosc_e" class="col-sm-4 col-form-label"><h5>Baciloscopia de escarro – 1ª amostra:</h5></label>
+                <div class="col-sm-8">
                 <select class="form-select" id="form_bacilosc_e" name="form_bacilosc_e" required>
                   <option selected disabled value="">selecione...</option>
                   <option value="1">1. Positiva</option>
@@ -212,9 +282,12 @@
                   <option value="3">3. Não realizada</option>
                   <option value="4">4. Não se aplica</option>
                 </select>
+              </div>
+              </div>
 
-                <label class="input-group-text" for="form_bacilosc_e2">Baciloscopia de escarro – 2ª amostra
-                </label>
+              <div class="form-group row">
+                <label for="form_bacilosc_e2" class="col-sm-4 col-form-label"><h5>Baciloscopia de escarro – 2ª amostra:</h5></label>
+                <div class="col-sm-8">
                 <select class="form-select" id="form_bacilosc_e2" name="form_bacilosc_e2" required>
                   <option selected disabled value="">selecione...</option>
                   <option value="1">1. Positiva</option>
@@ -223,12 +296,13 @@
                   <option value="4">4. Não se aplica</option>
                 </select>
               </div>
+              </div>  
+           
 
 
-
-              <div class="input-group input-group-lg">
-                <label class="input-group-text" for="form_bacilosc_6">Baciloscopia de escarro no 6º mês
-                </label>
+              <div class="form-group row">
+                <label for="form_bacilosc_6" class="col-sm-4 col-form-label"><h5>Baciloscopia de escarro no 6º mês:</h5></label>
+                <div class="col-sm-8">
                 <select class="form-select" id="form_bacilosc_6" name="form_bacilosc_6" required>
                   <option selected disabled value="">selecione...</option>
                   <option value="1">1. Positiva</option>
@@ -236,15 +310,25 @@
                   <option value="3">3. Não realizada</option>
                   <option value="4">4. Não se aplica</option>
                 </select>
-
-                <span class="input-group-text" id="inputGroup-sizing-lg">Dias em tratamento</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="0" id="form_dias_em_tratamento" name="form_dias_em_tratamento">
+                </div>
               </div>
 
-              <br/>
-             
-              <div class="input-group input-group-lg col-12">
-                <button class="btn btn-danger" type="submit">Clique aqui para ver o resultado da classificação do prognóstico</button>
+              <div class="form-group row">
+                <label for="form_dias_em_tratamento" class="col-sm-4 col-form-label"><h5>Dias em tratamento:</h5></label>
+                <div class="col-sm-8">
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="0" id="form_dias_em_tratamento" name="form_dias_em_tratamento">
+              </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-md-6 offset-md-3 text-center">
+                    <button class="btn prev-btn" type="button" style="background-color: #ebb5ae;"><i class="bi bi-arrow-bar-left"></i> Anterior</button>
+                    <button class="btn btn-danger" type="button" onclick="submeterFormulario()">Calcular o prognóstico</button>
+                  </div>
+                </div>
+                <br/>
+                
+                
               </div>
         </form>
 
@@ -260,9 +344,9 @@
       <div class="row gy-4">
         <div class="col-lg-5 col-md-12 footer-info">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span>DeepTub++</span>
+            <span>TITO</span>
           </a>
-          <p>Esperamos que a DeepTub++ possa auxiliar os profissionais de saúde no prognóstico da tuberculose.</p>
+          <p>Esperamos que a TITO possa auxiliar os profissionais de saúde no prognóstico da tuberculose.</p>
           <div class="social-links d-flex mt-4">
             <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
             <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
@@ -272,7 +356,7 @@
         </div>
 
         <div class="col-lg-2 col-6 footer-links">
-          <h4>Links úteis</h4>
+          <h5>Links úteis</h5>
           <ul>
             <li><a href="https://www.who.int/pt" target="_blank">OMS</a></li>
             <li><a href="https://www.gov.br/saude/pt-br"  target="_blank">Ministério da Saúde</a></li>
@@ -284,7 +368,7 @@
         
 
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-          <h4>Contate-nos</h4>
+          <h5>Contate-nos</h5>
           <p>
             R. Benfica, 455 <br>
             Recife, Pernambuco<br>
@@ -311,6 +395,9 @@
   <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
   <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="static/assets/vendor/aos/aos.js"></script>
   <script src="static/assets/vendor/glightbox/js/glightbox.min.js"></script>
@@ -321,6 +408,64 @@
 
   <!-- Template Main JS File -->
   <script src="static/assets/js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var firstScreen = document.getElementById("first-screen");
+      var secondScreen = document.getElementById("second-screen");
+      var nextBtn = document.querySelector(".next-btn");
+      var prevBtn = document.querySelector(".prev-btn");
+      var alertMessage = document.getElementById("alert-message");
+  
+      nextBtn.addEventListener("click", function() {
+        var inputs = firstScreen.getElementsByTagName("input");
+        var selects = firstScreen.getElementsByTagName("select");
+        var isValid = true;
+  
+        for (var i = 0; i < inputs.length; i++) {
+          if (inputs[i].hasAttribute("required") && inputs[i].value.trim() === "") {
+            isValid = false;
+            break;
+          }
+        }
+  
+        if (isValid) {
+          for (var i = 0; i < selects.length; i++) {
+            var selectedOption = selects[i].options[selects[i].selectedIndex];
+  
+            if (selectedOption.disabled) {
+              isValid = false;
+              break;
+            }
+          }
+        }
+  
+        if (isValid) {
+          firstScreen.style.display = "none";
+          secondScreen.style.display = "block";
+        } else {
+          showAlertMessage("Preencha todos os campos obrigatórios e selecione opções válidas.");
+        }
+      });
+  
+      prevBtn.addEventListener("click", function() {
+        firstScreen.style.display = "block";
+        secondScreen.style.display = "none";
+      });
+  
+      function showAlertMessage(message) {
+        alertMessage.textContent = message;
+        alertMessage.style.display = "block";
+        setTimeout(function() {
+          alertMessage.style.opacity = "0";
+          setTimeout(function() {
+            alertMessage.style.display = "none";
+            alertMessage.style.opacity = "1";
+          }, 3000);
+        }, 3000);
+      }
+    });
+  </script>
+
 
 </body>
 

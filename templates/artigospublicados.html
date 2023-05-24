@@ -24,6 +24,7 @@
   <link href="static/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
   <!-- Template Main CSS File -->
   <link href="static/assets/css/main.css" rel="stylesheet">
@@ -39,23 +40,15 @@
         .custom-range::-ms-thumb {
         background: #bb6054;
         }
-        canvas {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-
     </style>
-  <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
-  <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
-  <script src="https://unpkg.com/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.js"></script>
-  
+    
 </head>
-
 
 <body>
 
-  
+
+
+
   <!-- ======= Header ======= -->
   <section id="topbar" class="topbar d-flex align-items-center">
     <div class="container d-flex justify-content-center justify-content-md-between">
@@ -96,12 +89,11 @@
     <div class="container position-relative">
       <div class="row gy-5" data-aos="fade-in">
         <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center text-center text-lg-start">
-          <h2>TITO<span> Prognóstico</span></h2>
-         
+          <h2>TITO<span> Artigos publicados</span></h2>
+          <p>Abaixo está a lista dos principais trabalhos publicados relacionados a TITO (DeepTub)</i>.</p>
+
         </div>
-        <!--<div class="col-lg-6 order-1 order-lg-2">
-          <img src="static/assets/img/hero-img.svg" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="100">
-        </div>-->
+
       </div>
     </div>
 
@@ -121,25 +113,47 @@
 
 
   <main id="main">
-    
-    <section class="d-flex align-items-center justify-content-center">
-      <div  data-aos="fade-up" >
-        
-          {% if tipopredito == "cura" %}
-          <h3 style="color: #593734;">A <strong>probabilidade</strong> do prognóstico foi de <strong>{{ percentual }}%</strong> de <strong>cura</strong>
-         {% else %}
-          <h3 style="color: #593734;">A <strong>probabilidade</strong> do prognóstico foi de <strong>{{ percentual }}%</strong>de <strong>óbito</strong>
-         {% endif %}
-        </h3>
-       <div>
-         <div id="canvas-holder" style="width:100%">
-           <canvas id="chart"></canvas>
-           <h3>Probabilidade</h3>
-         </div>
-       </div>
-      </div>
-    </section>
-  
+ <!-- ======= About Us Section ======= -->
+ <section id="about" class="about">
+    <div class="container" data-aos="fade-up">
+        <br/>
+        <h2 id="tituloFormulario">Artigos publicados em <i>journal</i>/revista:</h2>
+        <div class="list-group">
+          <ul class="list-group">
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Geovanne Oliveira Alves; Lubnnia Morais Florêncio Souza; Elisson da Silva Rocha; João Fausto Lorenzato de Oliveira;Theo  Lynn; Vanderson Sampaio and Patricia Takako Endo. Benchmarking machine learning models to assist in the prognosis of tuberculosis. Informatics (MDPI) - Publicado</li>
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Guto Santos; Maria Gabriela de Almeida Rodrigues, Vanderson Sampaio, Theodore Lynn and Patricia Takako Endo. Brazilian classified data set for prognosis of tuberculosis, between January 2001 and April 2020. Scientific Data Nature - Publicado</li>
+          </ul>
+        </div>
+
+        <br/>
+        <h2 id="tituloFormulario">Artigos publicados em conferências:</h2>
+        <div class="list-group">
+          <ul class="list-group">
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Morgana Thalita da Silva Leite; Vanderson Sampaio; Theo Lynn and Patricia Takako Endo. Application and analysis of record linkage techniques to integrate Brazilian health databases. International Conference on Cyber Situational Awareness, Data Analytics and Assessment (CyberSA) 2020 - Publicado</li>
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Vanderson Sampaio and Patricia Takako Endo. Aplicação de técnicas de record linkage e feature selection para análise e seleção de características em uma base de dados integrada do SINAN. Anais da Mostra de Extensão, Inovação e Pesquisa 2020 - Publicado</li>
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Vanderson Sampaio and Patricia Takako Endo. Avaliação de modelos de machine learning utilizando a base de dados nacional do SINAN-TB de 2001 a 2019 para auxiliar no prognóstico da tuberculose. Anais da Mostra de Extensão, Inovação e Pesquisa 2021 - Publicado</li>
+            <li class="list-group-item">Morgana Thalita da Silva Leite; Maicon Herverton Lino Ferreira da Silva Barros; Vanderson Sampaio and Patricia Takako Endo. Utilizando Soundex e Metaphone Br Para a Criação de uma Base de Dados de Saúde Integrada Para Predição de Morte por Tuberculose. Semana Científica do Agreste Pernambucano (SECAP) 2020 - Publicado</li>
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Sebastião Rogério da Silva Neto; Vanderson Sampaio and Patricia Takako Endo. How Machine Learning Can Help the Classification of Treatment Outcomes of Tuberculosis: A Systematic Review. 56 Hawaii International Conference on System Sciences (HICSS)2023 - Publicado</li>
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Vanderson Sampaio and Patricia Takako Endo. Training and evaluation models of machine learning using national SINAN-TB. Anais da Mostra de Extensão, Inovação e Pesquisa 2022 - Publicado</li>
+            <li class="list-group-item">Morgana Thalita da Silva Leite; Maicon Herverton Lino Ferreira da Silva Barros; Élisson da Silva Rocha; Jady Shayenne Mota Cordeiro; Vanderson Sampaio and Patricia Takako Endo. Evaluating a deep learning model in integrated health databases to aid in the prognosis of tuberculosis. CISTI`23, 18th Iberian Conference on Information Systems and Technologies, 2023, Aveiro-Portugal. Aprovado</li>
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Vanderson Sampaio and Patricia Takako Endo. Machine learning model to classification in the prognosis of tuberculosis using real data from Brazil. CISTI’23, 18th Iberian Conference on Information Systems and Technologies, 2023, Aveiro-Portugal. Aprovado</li>
+
+          </ul>
+        </div>
+
+        <br/>
+        <h2 id="tituloFormulario">Dataset publicado:</h2>
+        <div class="list-group">
+          <ul class="list-group">
+            <li class="list-group-item">Maicon Herverton Lino Ferreira da Silva Barros; Guto Santos; Vanderson Sampaio, Theodore Lynn and Patricia Takako Endo. A Brazilian classified dataset for prognosis of tuberculosis. Mendeley Data - Publicado</li>
+          </ul>
+        </div>
+
+    </div>
+  </section><!-- End About Us Section -->
+
+  </main>
+
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
 
@@ -151,12 +165,15 @@
           </a>
           <p>Esperamos que a TITO possa auxiliar os profissionais de saúde no prognóstico da tuberculose.</p>
           <div class="social-links d-flex mt-4">
-            <a href="https://www.instagram.com/dotlabbrazil/" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
           </div>
         </div>
 
         <div class="col-lg-2 col-6 footer-links">
-          <h4>Links úteis</h4>
+          <h5>Links úteis</h5>
           <ul>
             <li><a href="https://www.who.int/pt" target="_blank">OMS</a></li>
             <li><a href="https://www.gov.br/saude/pt-br"  target="_blank">Ministério da Saúde</a></li>
@@ -168,7 +185,7 @@
         
 
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-          <h4>Contate-nos</h4>
+          <h5>Contate-nos</h5>
           <p>
             R. Benfica, 455 <br>
             Recife, Pernambuco<br>
@@ -193,8 +210,11 @@
   <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <div id="preloader"></div>
- 
+
   <!-- Vendor JS Files -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
   <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="static/assets/vendor/aos/aos.js"></script>
   <script src="static/assets/vendor/glightbox/js/glightbox.min.js"></script>
@@ -205,125 +225,7 @@
 
   <!-- Template Main JS File -->
   <script src="static/assets/js/main.js"></script>
-  <script>
-    var randomScalingFactor = function() {
-  return Math.round(Math.random() * 100);
-};
-
-var randomData = function () {
-  return [
-    randomScalingFactor(),
-    randomScalingFactor(),
-    randomScalingFactor()
-  ];
-};
-
-var randomValue = function (data) {
-  return Math.max.apply(null, data) * Math.random();
-};
-
-var data = [50,75,90,100];
-var value = {{ percentual }};
-
-var config = {
-  type: 'gauge',
-  {% if tipopredito == "cura" %}
-    data: {
-      labels: ['Baixa', 'Média', 'Alta', 'Altíssima'],
-      datasets: [{
-        data: data,
-        value: value,
-        //backgroundColor: [ '#ff6384', '#ffc235', '#38a2eb', '#00bf63'],
-        backgroundColor: [ '#99e5c3 ', '#66d8a6', '#33cb88', '#00be6a'],
-        borderWidth: 2
-      }]
-    },
-  {% else %}
-    data: {
-        labels: ['Baixa', 'Média', 'Alta', 'Altíssima'],
-        datasets: [{
-          data: data,
-          value: value,
-         // backgroundColor: ['#00bf63' , '#ffc235', '#38a2eb', '#ff6384'],
-          backgroundColor: ['#f3b0b5' , '#ee888f', '#e8616a', '#e23945'],
-         
-          borderWidth: 2
-        }]
-      },
-  {% endif %}
-
-  
-  options: {
-    responsive: true,
-    title: {
-      display: false,
-      text: 'Probabilidade do prognóstico da tuberculose'
-    },
-    layout: {
-      padding: {
-        bottom: 30
-      }
-    },
-    needle: {
-      // Needle circle radius as the percentage of the chart area width
-      radiusPercentage: 2,
-      // Needle width as the percentage of the chart area width
-      widthPercentage: 3.2,
-      // Needle length as the percentage of the interval between inner radius (0%) and outer radius (100%) of the arc
-      lengthPercentage: 80,
-      // The color of the 
-      {% if tipopredito == "cura" %}
-        color: '#395649'
-      {% else %}
-        color: '#711d23'
-      {% endif %}
-      
-    },
-    valueLabel: {
-      //formatter: Math.round,
-      display: false,
-      color: "#593734",
-      backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    },
-    plugins: {
-      datalabels: {
-        display: true,
-        formatter:  function (value, context) {
-          return context.chart.data.labels[context.dataIndex];
-        },
-        //color: function (context) {
-        //  return context.dataset.backgroundColor;
-        //},
-        {% if tipopredito == "cura" %}
-        color: '#24362e',
-        {% else %}
-          color: '#390f12',
-        {% endif %}
-        
-        //color: 'rgba(255, 255, 255, 1.0)',
-        //backgroundColor: 'rgba(255, 255, 255, 0.3)',
-        font: {
-          size: 24
-        }
-      }
-    }
-  }
-};
-
-window.onload = function() {
-  var ctx = document.getElementById('chart').getContext('2d');
-  window.myGauge = new Chart(ctx, config);
-};
-
-document.getElementById('randomizeData').addEventListener('click', function() {
-  config.data.datasets.forEach(function(dataset) {
-    dataset.data = randomData();
-    dataset.value = randomValue(dataset.data);
-  });
-
-  window.myGauge.update();
-});
-  </script>
+ 
 
 
 </body>

@@ -109,9 +109,9 @@ def processar_formulario():
     # Retorne a resposta ao cliente
     #return f'form_tipo_de_tratamento: {form_tipo_de_tratamento}, form_idade_do_paciente: {form_idade_do_paciente}, form_radiografia_torax: {form_radiografia_torax}, form_teste_tuberculinio: {form_teste_tuberculinio}, form_forma_da_tuberculose: {form_forma_da_tuberculose}, form_agravos_doenca_mental: {form_agravos_doenca_mental}, form_hiv: {form_hiv}, form_bacilosc_e: {form_bacilosc_e}, form_bacilosc_e2: {form_bacilosc_e2}, form_bacilosc_6: {form_bacilosc_6}, form_dias_em_tratamento: {form_dias_em_tratamento}'
 
-@app.route("/usuarios/<nome_usuario>")
-def usuarios(nome_usuario):
-    return nome_usuario
+@app.route("/artigospublicados")
+def artigospublicados():
+    return render_template("artigospublicados.html")
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
