@@ -8,10 +8,11 @@
   <title>TITO - Tuberculosis Intelligent TechnolOgy</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
-
   <!-- Favicons -->
-  <link href="static/assets/img/favicon.png" rel="icon">
-  <link href="static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="static/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/img/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,26 +63,36 @@
   </section><!-- End Top Bar -->
 
   <header id="header" class="header d-flex align-items-center">
-
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-      <a href="/" class="logo d-flex align-items-center">
+      <a href="/" class="d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="static/assets/img/logo.png" alt=""> -->
-        <img src="static/img/logodeeptub.jpeg" />
+        <img src="static/img/tito_logo_fb.png" width="200px" class="scroll-logo d-none">
       </a>
       <nav id="navbar" class="navbar">
         <ul>
           <li><a href="/">Início</a></li>
-          <li><a href="/#about">Sobre</a></li>
+          <li><a href="/#about">Sobre nós</a></li>
           <li><a href="/#faq">Perguntas frequentes</a></li>
         </ul>
       </nav><!-- .navbar -->
-
       <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-
     </div>
   </header><!-- End Header -->
+  
+  <script>
+    window.addEventListener('scroll', function() {
+      var scrollLogo = document.querySelector('.scroll-logo');
+      if (window.scrollY > 0) {
+        scrollLogo.classList.remove('d-none');
+      } else {
+        scrollLogo.classList.add('d-none');
+      }
+    });
+  </script>
+  
+  <!-- End Header -->
   <!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
@@ -89,7 +100,7 @@
     <div class="container position-relative">
       <div class="row gy-5" data-aos="fade-in">
         <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center text-center text-lg-start">
-          <h2>TITO<span> Artigos publicados</span></h2>
+          <h2><span>Artigos publicados</span></h2>
           <p>Abaixo está a lista dos principais trabalhos publicados relacionados a TITO (DeepTub)</i>.</p>
 
         </div>
@@ -173,7 +184,7 @@
         </div>
 
         <div class="col-lg-2 col-6 footer-links">
-          <h5>Links úteis</h5>
+          <h4>Links úteis</h4>
           <ul>
             <li><a href="https://www.who.int/pt" target="_blank">OMS</a></li>
             <li><a href="https://www.gov.br/saude/pt-br"  target="_blank">Ministério da Saúde</a></li>
@@ -185,7 +196,7 @@
         
 
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-          <h5>Contate-nos</h5>
+          <h4>Contate-nos</h4>
           <p>
             R. Benfica, 455 <br>
             Recife, Pernambuco<br>
