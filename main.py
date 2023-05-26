@@ -9,11 +9,22 @@ from pickle import load
 from PIL import Image
 from matplotlib import pyplot as plt
 import re
+import mysql.connector
 
 app = Flask(__name__)
 #route -> endereço exemplo upecaruaru.com.br/deeptub
 #função -> o que vai exibir naquela página
 #template 
+# Configuração da conexão com o banco de dados MySQL
+db_config = {
+    'host': '130.211.212.31',
+    'user': 'maicon',
+    'password': 'Hacker23Anos!',
+    'database': 'tito'
+}
+
+# Estabelecer conexão com o banco de dados
+conn = mysql.connector.connect(**db_config)
 
 
 loaded_model = pickle.load(open('SVM03-11-2022_02-50-37.sav','rb'))
@@ -43,6 +54,8 @@ def prognosis_tuberculosis(input_data):
     lista = exp.as_list()
     lista2 = []
     predictions = loaded_model.predict(test_scaled_set)
+
+
     #predictions
     if(predictions[0]==3):
         #retorno = "A probabilidade de **óbito** no prognósitco da Tuberculose é de: {}%"
@@ -66,23 +79,50 @@ def prognostico():
 @app.route('/prognostico_form', methods=['POST'])
 def processar_formulario():
     # Acessar os dados do formulário
-    form_tipo_de_tratamento = request.form['form_tipo_de_tratamento']
-    form_idade_do_paciente = request.form['form_idade_do_paciente']
-    form_radiografia_torax = request.form['form_radiografia_torax']
-    form_teste_tuberculinio = request.form['form_teste_tuberculinio']
-    form_forma_da_tuberculose = request.form['form_forma_da_tuberculose']
-    form_agravos_doenca_mental = request.form['form_agravos_doenca_mental']
-    form_hiv = request.form['form_hiv']
-    form_bacilosc_e = request.form['form_bacilosc_e']
-    form_bacilosc_e2 = request.form['form_bacilosc_e2']
-    form_bacilosc_6 = request.form['form_bacilosc_6']
-    form_dias_em_tratamento = request.form['form_dias_em_tratamento']
+    dados =  request.form
+    form_tipo_de_tratamento = dados['form_tipo_de_tratamento']
+    form_idade_do_paciente = dados['form_idade_do_paciente']
+    form_radiografia_torax = dados['form_radiografia_torax']
+    form_teste_tuberculinio = dados['form_teste_tuberculinio']
+    form_forma_da_tuberculose = dados['form_forma_da_tuberculose']
+    form_agravos_doenca_mental = dados['form_agravos_doenca_mental']
+    form_hiv = dados['form_hiv']
+    form_bacilosc_e = dados['form_bacilosc_e']
+    form_bacilosc_e2 = dados['form_bacilosc_e2']
+    form_bacilosc_6 = dados['form_bacilosc_6']
+    form_dias_em_tratamento = dados['form_dias_em_tratamento']
 
     
     # Faça o processamento necessário com os dados
     prognosis = prognosis_tuberculosis([form_idade_do_paciente, form_tipo_de_tratamento, form_radiografia_torax, form_teste_tuberculinio, form_forma_da_tuberculose, form_agravos_doenca_mental, form_bacilosc_e, form_bacilosc_e2, form_hiv, form_bacilosc_6, form_dias_em_tratamento])
     
     value=str(prognosis[1])
+
+    cursor = conn.cursor()
+    consulta = """INSERT INTO tito_classificacoes 
+              (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita) 
+              VALUES 
+              (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    valores = (
+        int(form_idade_do_paciente),
+        int(form_tipo_de_tratamento),
+        int(form_radiografia_torax),
+        int(form_teste_tuberculinio),
+        int(form_forma_da_tuberculose),
+        int(form_agravos_doenca_mental),
+        int(form_hiv),
+        int(form_bacilosc_e),
+        int(form_bacilosc_e2),
+        int(form_bacilosc_6),
+        int(form_dias_em_tratamento),
+        float(prognosis[0]),  # Converter para tipo float se necessário
+        float(value)  # Converter para tipo float se necessário
+    )
+    print(consulta)
+    print(valores)
+    cursor.execute(consulta, valores)
+    conn.commit()
+    cursor.close()
 
     ListaResultado = []
     for X in prognosis[2]:
