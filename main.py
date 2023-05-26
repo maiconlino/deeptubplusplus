@@ -9,22 +9,22 @@ from pickle import load
 from PIL import Image
 from matplotlib import pyplot as plt
 import re
-import mysql.connector
+    #import mysql.connector
 
 app = Flask(__name__)
 #route -> endereço exemplo upecaruaru.com.br/deeptub
 #função -> o que vai exibir naquela página
 #template 
 # Configuração da conexão com o banco de dados MySQL
-db_config = {
-    'host': '130.211.212.31',
-    'user': 'maicon',
-    'password': 'Hacker23Anos!',
-    'database': 'tito'
-}
+    # db_config = {
+    #     'host': '130.211.212.31',
+    #     'user': 'maicon',
+    #     'password': 'Hacker23Anos!',
+    #     'database': 'tito'
+    # }
 
 # Estabelecer conexão com o banco de dados
-conn = mysql.connector.connect(**db_config)
+    #conn = mysql.connector.connect(**db_config)
 
 
 loaded_model = pickle.load(open('SVM03-11-2022_02-50-37.sav','rb'))
@@ -98,31 +98,31 @@ def processar_formulario():
     
     value=str(prognosis[1])
 
-    cursor = conn.cursor()
-    consulta = """INSERT INTO tito_classificacoes 
-              (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita) 
-              VALUES 
-              (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    valores = (
-        int(form_idade_do_paciente),
-        int(form_tipo_de_tratamento),
-        int(form_radiografia_torax),
-        int(form_teste_tuberculinio),
-        int(form_forma_da_tuberculose),
-        int(form_agravos_doenca_mental),
-        int(form_hiv),
-        int(form_bacilosc_e),
-        int(form_bacilosc_e2),
-        int(form_bacilosc_6),
-        int(form_dias_em_tratamento),
-        float(prognosis[0]),  # Converter para tipo float se necessário
-        float(value)  # Converter para tipo float se necessário
-    )
-    print(consulta)
-    print(valores)
-    cursor.execute(consulta, valores)
-    conn.commit()
-    cursor.close()
+    # cursor = conn.cursor()
+    # consulta = """INSERT INTO tito_classificacoes 
+    #           (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita) 
+    #           VALUES 
+    #           (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    # valores = (
+    #     int(form_idade_do_paciente),
+    #     int(form_tipo_de_tratamento),
+    #     int(form_radiografia_torax),
+    #     int(form_teste_tuberculinio),
+    #     int(form_forma_da_tuberculose),
+    #     int(form_agravos_doenca_mental),
+    #     int(form_hiv),
+    #     int(form_bacilosc_e),
+    #     int(form_bacilosc_e2),
+    #     int(form_bacilosc_6),
+    #     int(form_dias_em_tratamento),
+    #     float(prognosis[0]),  # Converter para tipo float se necessário
+    #     float(value)  # Converter para tipo float se necessário
+    # )
+    # print(consulta)
+    # print(valores)
+    # cursor.execute(consulta, valores)
+    # conn.commit()
+    # cursor.close()
 
     ListaResultado = []
     for X in prognosis[2]:
