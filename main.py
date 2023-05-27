@@ -10,13 +10,17 @@ from PIL import Image
 from matplotlib import pyplot as plt
 import re
 import os
+from google.cloud.sql.connector import Connector
 import sqlalchemy
+import pymysql
+
     #import mysql.connector
 
 app = Flask(__name__)
 #route -> endereço exemplo upecaruaru.com.br/deeptub
 #função -> o que vai exibir naquela página
 #template 
+#Configuração para testar no MySQL local
 # Configuração da conexão com o banco de dados MySQL
     # db_config = {
     #     'host': '130.211.212.31',
@@ -42,38 +46,64 @@ prognosis = ''
 
 
 
+# initialize Connector object
+connector = Connector()
 
-def connect_unix_socket() -> sqlalchemy.engine.base.Engine:
-    """ Initializes a Unix socket connection pool for a Cloud SQL instance of MySQL. """
-    # Note: Saving credentials in environment variables is convenient, but not
-    # secure - consider a more secure solution such as
-    # Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
-    # keep secrets safe.
-    db_user = os.environ["DB_USER"]  # e.g. 'my-database-user'
-    db_pass = os.environ["DB_PASS"]  # e.g. 'my-database-password'
-    db_name = os.environ["DB_NAME"]  # e.g. 'my-database'
-    unix_socket_path = os.environ["INSTANCE_UNIX_SOCKET"]  # e.g. '/cloudsql/project:region:instance'
-
-    pool = sqlalchemy.create_engine(
-        # Equivalent URL:
-        # mysql+pymysql://<db_user>:<db_pass>@/<db_name>?unix_socket=<socket_path>/<cloud_sql_instance_name>
-        sqlalchemy.engine.url.URL.create(
-            drivername="mysql+pymysql",
-            username=db_user,
-            password=db_pass,
-            database=db_name,
-            query={"unix_socket": unix_socket_path},
-        ),
-        # ...
+# function to return the database connection
+def getconn() -> pymysql.connections.Connection:
+    conn: pymysql.connections.Connection = connector.connect(
+        "deeptub:us-central1:tito",
+        "pymysql",
+        user="maicon",
+        password="Hacker23Anos!",
+        db="tito"
     )
-    return pool
+    return conn
 
+# create connection pool
+pool = sqlalchemy.create_engine(
+    "mysql+pymysql://",
+    creator=getconn,
+)
 
+ # consulta = """
+    #           (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    # valores = (
+    #     int(form_idade_do_paciente),
+    #     int(form_tipo_de_tratamento),
+    #     int(form_radiografia_torax),
+    #     int(form_teste_tuberculinio),
+    #     int(form_forma_da_tuberculose),
+    #     int(form_agravos_doenca_mental),
+    #     int(form_hiv),
+    #     int(form_bacilosc_e),
+    #     int(form_bacilosc_e2),
+    #     int(form_bacilosc_6),
+    #     int(form_dias_em_tratamento),
+    #     float(prognosis[0]),  # Converter para tipo float se necessário
+    #     float(value)  # Converter para tipo float se necessário
+    # )
 
+# insert statement
+insert_stmt = sqlalchemy.text(
+    "INSERT INTO tito_classificacoes (idade) VALUES  (:idade)",
+)
 
+with pool.connect() as db_conn:
+    # insert into database
+    db_conn.execute(insert_stmt, parameters={"idade": "30"})
 
+    # query database
+    result = db_conn.execute(sqlalchemy.text("SELECT * from tito_classificacoes")).fetchall()
 
+    # commit transaction (SQLAlchemy v2.X.X is commit as you go)
+    db_conn.commit()
 
+    # Do something with the results
+    for row in result:
+        print(row)
+
+connector.close()
 
 def prognosis_tuberculosis(input_data):
     input_data_numpy = np.asarray(input_data)
@@ -163,29 +193,7 @@ def processar_formulario():
     # cursor.execute(consulta, valores)
     # conn.commit()
     # cursor.close()
-    engine = connect_unix_socket()
-    connection = engine.connect()
-    query = """INSERT INTO tito_classificacoes 
-               (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita) 
-               VALUES 
-               (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    valores = (
-         int(form_idade_do_paciente),
-         int(form_tipo_de_tratamento),
-         int(form_radiografia_torax),
-         int(form_teste_tuberculinio),
-         int(form_forma_da_tuberculose),
-         int(form_agravos_doenca_mental),
-         int(form_hiv),
-         int(form_bacilosc_e),
-         int(form_bacilosc_e2),
-         int(form_bacilosc_6),
-         int(form_dias_em_tratamento),
-         float(prognosis[0]),  # Converter para tipo float se necessário
-         float(value)  # Converter para tipo float se necessário
-     )
-    connection.execute(query, valores)
-    connection.close()
+    
 
     ListaResultado = []
     for X in prognosis[2]:
