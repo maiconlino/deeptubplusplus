@@ -140,6 +140,7 @@ def processar_formulario():
     with pool.connect() as db_conn:
         # insert into database
         db_conn.execute(insert_stmt, parameters={"idade": form_idade_do_paciente, "tipo_de_tratamento": form_tipo_de_tratamento, "radiografia_do_torax": form_radiografia_torax, "teste_tuberculineo":form_teste_tuberculinio, "forma_tuberculose":form_forma_da_tuberculose, "agravos_doenca_mental":form_agravos_doenca_mental, "hiv":form_hiv, "baciloscopia_1_amostra":form_bacilosc_e, "baciloscopia_2_amostra":form_bacilosc_e2, "baciloscopia_6_mes":form_bacilosc_6, "dias_em_tratamento":form_dias_em_tratamento, "classificacao_predita":prognosis[0], "probabilidade_predita":value})
+        db_conn.commit()
     connector.close()
    
     
