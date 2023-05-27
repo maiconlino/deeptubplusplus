@@ -9,6 +9,8 @@ from pickle import load
 from PIL import Image
 from matplotlib import pyplot as plt
 import re
+import os
+import sqlalchemy
     #import mysql.connector
 
 app = Flask(__name__)
@@ -35,6 +37,44 @@ Y_train = pd.read_csv('Y_trainLIME_03-19-2022_03-59-34.csv', sep=';', index_col=
 
 colunas = ('NU_IDADE_N','TRATAMENTO','RAIOX_TORA','TESTE_TUBE','FORMA','AGRAVDOENC','BACILOSC_E','BACILOS_E2','HIV','BACILOSC_6','DIAS')
 prognosis = ''
+
+
+
+
+
+
+def connect_unix_socket() -> sqlalchemy.engine.base.Engine:
+    """ Initializes a Unix socket connection pool for a Cloud SQL instance of MySQL. """
+    # Note: Saving credentials in environment variables is convenient, but not
+    # secure - consider a more secure solution such as
+    # Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
+    # keep secrets safe.
+    db_user = os.environ["DB_USER"]  # e.g. 'my-database-user'
+    db_pass = os.environ["DB_PASS"]  # e.g. 'my-database-password'
+    db_name = os.environ["DB_NAME"]  # e.g. 'my-database'
+    unix_socket_path = os.environ["INSTANCE_UNIX_SOCKET"]  # e.g. '/cloudsql/project:region:instance'
+
+    pool = sqlalchemy.create_engine(
+        # Equivalent URL:
+        # mysql+pymysql://<db_user>:<db_pass>@/<db_name>?unix_socket=<socket_path>/<cloud_sql_instance_name>
+        sqlalchemy.engine.url.URL.create(
+            drivername="mysql+pymysql",
+            username=db_user,
+            password=db_pass,
+            database=db_name,
+            query={"unix_socket": unix_socket_path},
+        ),
+        # ...
+    )
+    return pool
+
+
+
+
+
+
+
+
 def prognosis_tuberculosis(input_data):
     input_data_numpy = np.asarray(input_data)
     input_reshape = input_data_numpy.reshape(1,-1)
@@ -123,6 +163,29 @@ def processar_formulario():
     # cursor.execute(consulta, valores)
     # conn.commit()
     # cursor.close()
+    engine = connect_unix_socket()
+    connection = engine.connect()
+    query = """INSERT INTO tito_classificacoes 
+               (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita) 
+               VALUES 
+               (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    valores = (
+         int(form_idade_do_paciente),
+         int(form_tipo_de_tratamento),
+         int(form_radiografia_torax),
+         int(form_teste_tuberculinio),
+         int(form_forma_da_tuberculose),
+         int(form_agravos_doenca_mental),
+         int(form_hiv),
+         int(form_bacilosc_e),
+         int(form_bacilosc_e2),
+         int(form_bacilosc_6),
+         int(form_dias_em_tratamento),
+         float(prognosis[0]),  # Converter para tipo float se necessário
+         float(value)  # Converter para tipo float se necessário
+     )
+    connection.execute(query, valores)
+    connection.close()
 
     ListaResultado = []
     for X in prognosis[2]:
