@@ -209,6 +209,7 @@ def cadastro():
         if vazio or lenSenhaMenorQue6 or lenSenhaMenorQue6Confirmacao or not(senhasIguais):
             submissao = False
         else:
+            submissao = False
             #tudo certo pode cadastrar no banco
             # Gerar um salt (valor aleatório utilizado na criptografia)
             salt = bcrypt.gensalt()
@@ -218,7 +219,6 @@ def cadastro():
 
             # Exibir a senha criptografada
             #print(senha_criptografada.decode('utf-8'))
-
              # insert statement
             insert_stmt = sqlalchemy.text("""INSERT INTO tito_usuarios 
                         (nomeCompleto, cpf, senhaCriptografada, email) 
@@ -228,8 +228,14 @@ def cadastro():
 
             with pool.connect() as db_conn:
                 # insert into database
-                db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
+                result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+form_email+"'")).fetchall()
+                # Do something with the results
+
+
+                #db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
                 db_conn.commit()
+                for row in result:
+                    print(row)
             connector.close()   
         return render_template('cadastro.html', submissao=submissao, vazio=vazio, lenSenhaMenorQue6=lenSenhaMenorQue6, lenSenhaMenorQue6Confirmacao=lenSenhaMenorQue6Confirmacao, senhasIguais=senhasIguais, teste=senha_criptografada)
 
