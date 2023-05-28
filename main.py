@@ -206,6 +206,7 @@ def cadastro():
         # ou qualquer outra lógica desejada.
 
         submissao = True
+        jaExisteNoBancoDeDados = False
         if vazio or lenSenhaMenorQue6 or lenSenhaMenorQue6Confirmacao or not(senhasIguais):
             submissao = False
         else:
@@ -231,13 +232,17 @@ def cadastro():
                 result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+form_email+"'")).fetchall()
                 # Do something with the results
 
-
-                #db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
                 db_conn.commit()
                 for row in result:
-                    print(row)
+                    if row[4]==form_email or row[2]==form_cpf:
+                        submissao = True
+                        jaExisteNoBancoDeDados = True
+                        break
+                if not(jaExisteNoBancoDeDados):
+                         db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
+                         
             connector.close()   
-        return render_template('cadastro.html', submissao=submissao, vazio=vazio, lenSenhaMenorQue6=lenSenhaMenorQue6, lenSenhaMenorQue6Confirmacao=lenSenhaMenorQue6Confirmacao, senhasIguais=senhasIguais, teste=senha_criptografada)
+        return render_template('cadastro.html', submissao=submissao, vazio=vazio, lenSenhaMenorQue6=lenSenhaMenorQue6, lenSenhaMenorQue6Confirmacao=lenSenhaMenorQue6Confirmacao, senhasIguais=senhasIguais, teste=senha_criptografada, jaExisteNoBancoDeDados=jaExisteNoBancoDeDados)
 
     return render_template('cadastro.html')
 

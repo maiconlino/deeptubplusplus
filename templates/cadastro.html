@@ -202,6 +202,11 @@ function ocultarModalCarregamento() {
                   {% else %}
                   {% endif %}
 
+                  {% if jaExisteNoBancoDeDados == True %}
+                    <div class="alert alert-danger">O usuário já possui cadastro no banco de dados com o CPF ou email informado.</div>
+                  {% else %}
+                  {% endif %}
+
 
                   <br/>
                   <div class="form-group row">
