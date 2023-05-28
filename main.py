@@ -14,6 +14,7 @@ from google.cloud.sql.connector import Connector
 import sqlalchemy
 import pymysql
 import bcrypt
+from concurrent.futures import TimeoutError
 
     #import mysql.connector
 
@@ -240,8 +241,14 @@ def cadastro():
                         break
                 if not(jaExisteNoBancoDeDados):
                          db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
-                         
-            connector.close()   
+
+            try:
+            # Seu código aqui que pode gerar um TimeoutError
+                connector.close()  
+            except TimeoutError:
+                # Tratamento do erro TimeoutError
+                pass
+             
         return render_template('cadastro.html', submissao=submissao, vazio=vazio, lenSenhaMenorQue6=lenSenhaMenorQue6, lenSenhaMenorQue6Confirmacao=lenSenhaMenorQue6Confirmacao, senhasIguais=senhasIguais, teste=senha_criptografada, jaExisteNoBancoDeDados=jaExisteNoBancoDeDados)
 
     return render_template('cadastro.html')
