@@ -241,6 +241,7 @@ def cadastro():
                         break
                 if not(jaExisteNoBancoDeDados):
                          db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
+                         db_conn.commit()
 
             try:
             # Seu código aqui que pode gerar um TimeoutError
