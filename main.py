@@ -13,6 +13,7 @@ import os
 from google.cloud.sql.connector import Connector
 import sqlalchemy
 import pymysql
+import bcrypt
 
     #import mysql.connector
 
@@ -151,20 +152,20 @@ def processar_formulario():
     
     df = pd.DataFrame({"Attributes" : ListaResultado})
     if prognosis[0]==1:
-        print('Classificado como: Cura 🔵')
-        print('<h2>Probabilidade de: ', value,'% </h2> ')
+        #print('Classificado como: Cura 🔵')
+        #print('<h2>Probabilidade de: ', value,'% </h2> ')
         #st.metric(label=' ',value=str(prognosis[1])+'%')
-        print("Atributos que influenciaram para este resultado por ordem de importância")
+        #print("Atributos que influenciaram para este resultado por ordem de importância")
         #st.dataframe(prognosis[2])
-        print(df)
+        #print(df)
         return render_template("resultado_prognostico.html",percentual=value, tipopredito='cura')
     else:
-        print('Classificado como: Óbito 🔴')
-        print('<h2>Probabilidade de: ', value,'% </h2> ')
+        #print('Classificado como: Óbito 🔴')
+        #print('<h2>Probabilidade de: ', value,'% </h2> ')
         #st.metric(label=' ',value=str(prognosis[1])+'%')
-        print("Atributos que influenciaram para este resultado por ordem de importância")
+        #print("Atributos que influenciaram para este resultado por ordem de importância")
         #st.dataframe(prognosis[2])
-        print(df)
+        #print(df)
         return render_template("resultado_prognostico.html",percentual=value,  tipopredito='obito')
 
     # Retorne a resposta ao cliente
@@ -173,6 +174,66 @@ def processar_formulario():
 @app.route("/artigospublicados")
 def artigospublicados():
     return render_template("artigospublicados.html")
+
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    senha_criptografada = ""
+    if request.method == 'POST':
+        # Obter os dados do formulário
+        form_nome_completo = request.form['form_nome_completo']
+        form_cpf = request.form['form_cpf']
+        form_email = request.form['form_email']
+        form_sen = request.form['form_sen']
+        form_senc = request.form['form_senc']
+       
+        #validacao back-end seguranca se o usuario desativar javascript ou manipula-lo no front
+        vazio = False
+        if form_nome_completo=="" or form_cpf=="" or form_email=="" or form_sen=="" or form_senc=="":
+            vazio = True
+        
+        lenSenhaMenorQue6 = False
+        if len(form_sen)<6:
+            lenSenhaMenorQue6 = True
+        
+        lenSenhaMenorQue6Confirmacao = False
+        if len(form_senc)<6:
+            lenSenhaMenorQue6Confirmacao = True
+ 
+        senhasIguais = False
+        if form_sen==form_senc:
+            senhasIguais = True
+        # Aqui você pode realizar o processamento necessário, como salvar os dados em um banco de dados
+        # ou qualquer outra lógica desejada.
+
+        submissao = True
+        if vazio or lenSenhaMenorQue6 or lenSenhaMenorQue6Confirmacao or not(senhasIguais):
+            submissao = False
+        else:
+            #tudo certo pode cadastrar no banco
+            # Gerar um salt (valor aleatório utilizado na criptografia)
+            salt = bcrypt.gensalt()
+            
+            # Criptografar a senha com o salt
+            senha_criptografada = bcrypt.hashpw(form_sen.encode('utf-8'), salt)
+
+            # Exibir a senha criptografada
+            #print(senha_criptografada.decode('utf-8'))
+
+             # insert statement
+            insert_stmt = sqlalchemy.text("""INSERT INTO tito_usuarios 
+                        (nomeCompleto, cpf, senhaCriptografada, email) 
+                        VALUES 
+                        (:nomeCompleto, :cpf, :senhaCriptografada, :email)""",
+            )
+
+            with pool.connect() as db_conn:
+                # insert into database
+                db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
+                db_conn.commit()
+            connector.close()   
+        return render_template('cadastro.html', submissao=submissao, vazio=vazio, lenSenhaMenorQue6=lenSenhaMenorQue6, lenSenhaMenorQue6Confirmacao=lenSenhaMenorQue6Confirmacao, senhasIguais=senhasIguais, teste=senha_criptografada)
+
+    return render_template('cadastro.html')
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
