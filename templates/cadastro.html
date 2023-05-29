@@ -197,7 +197,7 @@ function ocultarModalCarregamento() {
                   {% else %}
                   {% endif %}
 
-                  {% if submissao == False %}
+                  {% if submissao == True %}
                     <div class="alert alert-success">Cadastro efetuado com sucesso! Faça login para ter acesso ao módulo de acomanhamento do paciente.</div>
                   {% else %}
                   {% endif %}
@@ -471,6 +471,31 @@ function ocultarModalCarregamento() {
             });
         });
     });
+</script>
+<script>
+  $(document).ready(function() {
+  // Adicione um evento para capturar as alterações no campo de e-mail
+  $('#form_email').on('input', function() {
+    var email = $(this).val();
+
+    // Faça a solicitação AJAX para a rota Flask
+    $.ajax({
+      url: '/validar_email',
+      method: 'POST',
+      data: { 'email': email },
+      success: function(response) {
+        if (response.email_cadastrado) {
+          // Desative o botão "Cadastrar" se o e-mail já estiver cadastrado
+          $('#botaoCadastro').prop('disabled', true);
+        } else {
+          // Ative o botão "Cadastrar" se o e-mail não estiver cadastrado
+          $('#botaoCadastro').prop('disabled', false);
+        }
+      }
+    });
+  });
+});
+
 </script>
 </body>
 

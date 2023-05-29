@@ -15,6 +15,7 @@ import sqlalchemy
 import pymysql
 import bcrypt
 from concurrent.futures import TimeoutError
+import jsonify
 
     #import mysql.connector
 
@@ -211,7 +212,7 @@ def cadastro():
         if vazio or lenSenhaMenorQue6 or lenSenhaMenorQue6Confirmacao or not(senhasIguais):
             submissao = False
         else:
-            submissao = False
+            submissao = True
             #tudo certo pode cadastrar no banco
             # Gerar um salt (valor aleatório utilizado na criptografia)
             salt = bcrypt.gensalt()
@@ -230,13 +231,13 @@ def cadastro():
 
             with pool.connect() as db_conn:
                 # insert into database
-                result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+form_email+"'")).fetchall()
+                result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+form_email+"' OR cpf='"+form_cpf+"")).fetchall()
                 # Do something with the results
 
                 db_conn.commit()
                 for row in result:
                     if row[4]==form_email or row[2]==form_cpf:
-                        submissao = True
+                        submissao = False
                         jaExisteNoBancoDeDados = True
                         break
                 if not(jaExisteNoBancoDeDados):
@@ -253,6 +254,36 @@ def cadastro():
         return render_template('cadastro.html', submissao=submissao, vazio=vazio, lenSenhaMenorQue6=lenSenhaMenorQue6, lenSenhaMenorQue6Confirmacao=lenSenhaMenorQue6Confirmacao, senhasIguais=senhasIguais, teste=senha_criptografada, jaExisteNoBancoDeDados=jaExisteNoBancoDeDados)
 
     return render_template('cadastro.html')
+
+
+@app.route('/validar_email', methods=['POST'])
+def validar_email():
+    email = request.form.get('email')  # Obtenha o valor do campo de e-mail enviado pelo AJAX
+    # Verifique se o e-mail já está cadastrado no banco de dados
+    tamResult = 0
+    with pool.connect() as db_conn:
+                # insert into database
+                result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+email+"'")).fetchall()
+                # Do something with the results
+                tamResult = len(result)
+                db_conn.commit()
+                try:
+                # Seu código aqui que pode gerar um TimeoutError
+                    connector.close()  
+                except TimeoutError:
+                    # Tratamento do erro TimeoutError
+                    pass
+    
+    email_cadastrado = False
+    if tamResult>0:
+        email_cadastrado = True
+
+    # Retorne a resposta em formato JSON
+    return jsonify({'email_cadastrado': email_cadastrado})
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
