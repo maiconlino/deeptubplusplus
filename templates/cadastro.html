@@ -484,7 +484,7 @@ function ocultarModalCarregamento() {
       method: 'POST',
       data: { 'email': email },
       success: function(response) {
-        if (response.email_cadastrado) {
+        if (alert(response.email_cadastrado)) {
           // Desative o botão "Cadastrar" se o e-mail já estiver cadastrado
           $('#botaoCadastro').prop('disabled', true);
         } else {

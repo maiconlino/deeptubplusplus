@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import numpy as np
 import pickle 
@@ -15,7 +15,6 @@ import sqlalchemy
 import pymysql
 import bcrypt
 from concurrent.futures import TimeoutError
-import jsonify
 
     #import mysql.connector
 
@@ -256,23 +255,24 @@ def cadastro():
     return render_template('cadastro.html')
 
 
+
 @app.route('/validar_email', methods=['POST'])
 def validar_email():
     email = request.form.get('email')  # Obtenha o valor do campo de e-mail enviado pelo AJAX
     # Verifique se o e-mail já está cadastrado no banco de dados
     tamResult = 0
     with pool.connect() as db_conn:
-                # insert into database
-                result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+email+"'")).fetchall()
-                # Do something with the results
-                tamResult = len(result)
-                db_conn.commit()
-                try:
-                # Seu código aqui que pode gerar um TimeoutError
-                    connector.close()  
-                except TimeoutError:
-                    # Tratamento do erro TimeoutError
-                    pass
+                 # insert into database
+                 result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+email+"'")).fetchall()
+                 # Do something with the results
+                 tamResult = len(result)
+                 db_conn.commit()
+                 try:
+                     # Seu código aqui que pode gerar um TimeoutError
+                     connector.close()  
+                 except TimeoutError:
+                     # Tratamento do erro TimeoutError
+                     pass
     
     email_cadastrado = False
     if tamResult>0:
