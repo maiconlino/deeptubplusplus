@@ -216,7 +216,7 @@ def cadastro():
 
             with pool.connect() as db_conn:
                 # insert into database
-                select_Email = sqlalchemy.text("SELECT * from tito_usuarios WHERE email=':email' or cpf=':cpf'")
+                select_Email = sqlalchemy.text("SELECT * from tito_usuarios WHERE email=:email or cpf=:cpf")
                 result = db_conn.execute(select_Email, parameters={"email": form_email, "cpf": form_cpf}).fetchall()
                 #result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+form_email+"' OR cpf='"+form_cpf+"")).fetchall()
                 # Do something with the results
@@ -251,7 +251,7 @@ def validar_email():
     tamResult = 0
     with pool.connect() as db_conn:
                  # insert into database
-                 select_Email = sqlalchemy.text("SELECT * from tito_usuarios WHERE email=':email'")
+                 select_Email = sqlalchemy.text("SELECT * from tito_usuarios WHERE email=:email")
                  result = db_conn.execute(select_Email, parameters={"email": email}).fetchall()
                  #result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+email+"'")).fetchall()
                  # Do something with the results
