@@ -19,20 +19,6 @@ from concurrent.futures import TimeoutError
     #import mysql.connector
 
 app = Flask(__name__)
-#route -> endereço exemplo upecaruaru.com.br/deeptub
-#função -> o que vai exibir naquela página
-#template 
-#Configuração para testar no MySQL local
-# Configuração da conexão com o banco de dados MySQL
-    # db_config = {
-    #     'host': '130.211.212.31',
-    #     'user': 'maicon',
-    #     'password': 'Hacker23Anos!',
-    #     'database': 'tito'
-    # }
-
-# Estabelecer conexão com o banco de dados
-    #conn = mysql.connector.connect(**db_config)
 
 
 loaded_model = pickle.load(open('SVM03-11-2022_02-50-37.sav','rb'))
@@ -230,7 +216,9 @@ def cadastro():
 
             with pool.connect() as db_conn:
                 # insert into database
-                result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+form_email+"' OR cpf='"+form_cpf+"")).fetchall()
+                select_Email = sqlalchemy.text("SELECT * from tito_usuarios WHERE email=':email' or cpf=':cpf'")
+                result = db_conn.execute(select_Email, parameters={"email": form_email, "cpf": form_cpf}).fetchall()
+                #result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+form_email+"' OR cpf='"+form_cpf+"")).fetchall()
                 # Do something with the results
 
                 db_conn.commit()
@@ -263,10 +251,12 @@ def validar_email():
     tamResult = 0
     with pool.connect() as db_conn:
                  # insert into database
-                 result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+email+"'")).fetchall()
+                 select_Email = sqlalchemy.text("SELECT * from tito_usuarios WHERE email=':email'")
+                 result = db_conn.execute(select_Email, parameters={"email": email}).fetchall()
+                 #result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+email+"'")).fetchall()
                  # Do something with the results
-                 tamResult = len(result)
                  db_conn.commit()
+                 tamResult = len(result)
                  try:
                      # Seu código aqui que pode gerar um TimeoutError
                      connector.close()  
