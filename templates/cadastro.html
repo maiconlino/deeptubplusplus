@@ -228,6 +228,7 @@ function ocultarModalCarregamento() {
                   <div class="col-sm-8">
                     <input type="email" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_email" placeholder="seuemail@dominio.com.br" name="form_email" required>
                     <small>O seu e-mail será o seu usuário de acesso.</small>
+                    <small id="mensagemEmailCadastrado"></small>
                   </div>
                 </div>
 
@@ -475,7 +476,7 @@ function ocultarModalCarregamento() {
 <script>
   $(document).ready(function() {
   // Adicione um evento para capturar as alterações no campo de e-mail
-  $('#form_email').on('input', function() {
+  $('#form_email').on('blur', function() {
     var email = $(this).val();
 
     // Faça a solicitação AJAX para a rota Flask
@@ -484,12 +485,16 @@ function ocultarModalCarregamento() {
       method: 'POST',
       data: { 'email': email },
       success: function(response) {
-        if (alert(response.email_cadastrado)) {
+        if (response.email_cadastrado) {
           // Desative o botão "Cadastrar" se o e-mail já estiver cadastrado
           $('#botaoCadastro').prop('disabled', true);
+          $('#mensagemEmailCadastrado').prop('className', 'alert alert-danger');
+          $('#mensagemEmailCadastrado').prop('textContent', 'Esse e-mail já está cadastrado no banco de dados.');
         } else {
           // Ative o botão "Cadastrar" se o e-mail não estiver cadastrado
           $('#botaoCadastro').prop('disabled', false);
+          $('#mensagemEmailCadastrado').prop('className', 'alert alert-success');
+          $('#mensagemEmailCadastrado').prop('textContent', 'Esse e-mail <strong>não possui cadastro</strong>.');
         }
       }
     });
