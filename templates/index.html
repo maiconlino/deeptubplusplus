@@ -42,6 +42,14 @@
         <i class="d-flex align-items-center">dotLab Brazil</i>
       </div>
       <div class="social-links d-none d-md-flex align-items-center">
+      <div>  
+        {% if session["username"] is defined and session["username"]!="" %}
+          Olá, <strong>{{ session["username"] }}</strong> seja bem-vindo(a)! <a href="/logout">Sair</a>
+        {% else %}
+            <!-- O código para caso o usuário seja vazio -->
+        {% endif %}
+    
+      </div>
         <a href="https://www.instagram.com/dotlabbrazil/" class="instagram"><i class="bi bi-instagram"></i></a>
       </div>
     </div>
@@ -59,8 +67,11 @@
           <li><a href="#hero">Início</a></li>
           <li><a href="#about">Sobre nós</a></li>
           <li><a href="#faq">Perguntas frequentes</a></li>
+          <li><a href="/cadastro">Cadastra-se</a></li>
+          <li><a href="/fazerlogin">Faça login</a></li>
         </ul>
       </nav><!-- .navbar -->
+        
       <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
     </div>

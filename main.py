@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import pandas as pd
 import numpy as np
 import pickle 
@@ -19,6 +19,7 @@ from concurrent.futures import TimeoutError
     #import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = '{[L.i.F.e.]*(C.t.I.)}_flask'
 
 
 loaded_model = pickle.load(open('SVM03-11-2022_02-50-37.sav','rb'))
@@ -90,6 +91,8 @@ def prognosis_tuberculosis(input_data):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
 
 @app.route("/prognostico")
 def prognostico():
@@ -298,6 +301,37 @@ def validar_cpf():
     # Retorne a resposta em formato JSON
     return jsonify({'cpf_cadastrado': cpf_cadastrado})
 
+@app.route('/painelacompanhamento')
+def painelacompanhamento():
+    if 'username' in session:
+        #return f'Olá, {session["username"]}! <a href="/logout">Logout</a>'
+        return render_template('index.html')
+    return render_template('prognostico.html')
+
+@app.route('/fazerlogin', methods=['GET', 'POST'])
+def login():
+    senha_criptografada = ""
+    if request.method == 'POST':
+        # Obter os dados do formulário
+        username = request.form['form_email']
+        password = request.form['form_sen']
+
+        # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
+
+        # Por simplicidade, vamos verificar se o usuário é "admin" e a senha é "password".
+
+        if username == 'admin' and password == 'password':
+            session['username'] = username
+            return redirect(url_for('painelacompanhamento'))
+        else:
+             return render_template('efetuarlogin.html', erro=True)
+    return render_template('efetuarlogin.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
