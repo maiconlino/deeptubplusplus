@@ -479,6 +479,8 @@ function ocultarModalCarregamento() {
   $('#form_email').on('blur', function() {
     var email = $(this).val();
 
+    $('#mensagemEmailCadastrado').html('<div class="spinner-border text-primary" role="status">Aguarde, validando o seu e-mail.</div>');
+
     // Faça a solicitação AJAX para a rota Flask
     $.ajax({
       url: '/validar_email',
@@ -494,7 +496,7 @@ function ocultarModalCarregamento() {
           // Ative o botão "Cadastrar" se o e-mail não estiver cadastrado
           $('#botaoCadastro').prop('disabled', false);
           $('#mensagemEmailCadastrado').prop('className', 'alert alert-success');
-          $('#mensagemEmailCadastrado').prop('textContent', 'Esse e-mail <strong>não possui cadastro</strong>.');
+          $('#mensagemEmailCadastrado').prop('textContent', 'Esse e-mail não possui cadastro.');
         }
       }
     });
