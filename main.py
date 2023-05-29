@@ -253,7 +253,6 @@ def validar_email():
                  # insert into database
                  select_Email = sqlalchemy.text("SELECT * from tito_usuarios WHERE email=:email")
                  result = db_conn.execute(select_Email, parameters={"email": email}).fetchall()
-                 #result = db_conn.execute(sqlalchemy.text("SELECT * from tito_usuarios WHERE email='"+email+"'")).fetchall()
                  # Do something with the results
                  db_conn.commit()
                  tamResult = len(result)
@@ -273,6 +272,31 @@ def validar_email():
 
 
 
+@app.route('/validar_cpf', methods=['POST'])
+def validar_cpf():
+    cpf = request.form.get('cpf')  # Obtenha o valor do campo de e-mail enviado pelo AJAX
+    # Verifique se o e-mail já está cadastrado no banco de dados
+    tamResult = 0
+    with pool.connect() as db_conn:
+                 # insert into database
+                 select_Cpf = sqlalchemy.text("SELECT * from tito_usuarios WHERE cpf=:cpf")
+                 result = db_conn.execute(select_Cpf, parameters={"cpf": cpf}).fetchall()
+                 # Do something with the results
+                 db_conn.commit()
+                 tamResult = len(result)
+                 try:
+                     # Seu código aqui que pode gerar um TimeoutError
+                     connector.close()  
+                 except TimeoutError:
+                     # Tratamento do erro TimeoutError
+                     pass
+    
+    cpf_cadastrado = False
+    if tamResult>0:
+        cpf_cadastrado = True
+
+    # Retorne a resposta em formato JSON
+    return jsonify({'cpf_cadastrado': cpf_cadastrado})
 
 
 if __name__ == "__main__":
