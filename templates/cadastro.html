@@ -480,7 +480,7 @@ function ocultarModalCarregamento() {
   $('#form_email').on('blur', function() {
     var email = $(this).val();
 
-    $('#mensagemEmailCadastrado').html('<div class="spinner-border text-primary" role="status">Aguarde, validando o seu e-mail.</div>');
+    $('#mensagemEmailCadastrado').html('<div class="spinner-border text-primary" role="status"></div>');
 
     // Faça a solicitação AJAX para a rota Flask
     $.ajax({
@@ -509,9 +509,9 @@ function ocultarModalCarregamento() {
   $(document).ready(function() {
   // Adicione um evento para capturar as alterações no campo de e-mail
   $('#form_cpf').on('blur', function() {
-    var email = $(this).val();
+    var cpf = $(this).val();
 
-    $('#mensagemCPFCadastrado').html('<div class="spinner-border text-primary" role="status">Aguarde, validando o seu CPF.</div>');
+    $('#mensagemCPFCadastrado').html('<div class="spinner-border text-primary" role="status"></div>');
 
     // Faça a solicitação AJAX para a rota Flask
     $.ajax({
