@@ -313,18 +313,32 @@ def login():
     senha_criptografada = ""
     if request.method == 'POST':
         # Obter os dados do formulário
-        username = request.form['form_email']
-        password = request.form['form_sen']
-
+        email = request.form['form_email']
+        sen = request.form['form_sen']
+        
         # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
-
-        # Por simplicidade, vamos verificar se o usuário é "admin" e a senha é "password".
-
-        if username == 'admin' and password == 'password':
-            session['username'] = username
-            return redirect(url_for('painelacompanhamento'))
+        with pool.connect() as db_conn:
+                    # insert into database
+                    select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto from tito_usuarios WHERE email=:email")
+                    result = db_conn.execute(select_Cpf, parameters={"email": email, "sen": sen}).fetchall()
+                    # Do something with the results
+                    db_conn.commit()
+                    tamResult = len(result)
+                    try:
+                        # Seu código aqui que pode gerar um TimeoutError
+                        connector.close()  
+                    except TimeoutError:
+                        # Tratamento do erro TimeoutError
+                        pass
+        
+        if tamResult>0:
+            if bcrypt.checkpw(sen.encode('utf-8'), result[0]):
+                session['username'] = result[1]
+                return redirect(url_for('painelacompanhamento'))
+            else:
+                return render_template('efetuarlogin.html', erro=True)
         else:
-             return render_template('efetuarlogin.html', erro=True)
+                return render_template('efetuarlogin.html', erro=True)
     return render_template('efetuarlogin.html')
 
 
