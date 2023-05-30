@@ -311,6 +311,7 @@ def painelacompanhamento():
 @app.route('/fazerlogin', methods=['GET', 'POST'])
 def login():
     senha_criptografada = ""
+    tamResult = 0
     if request.method == 'POST':
         # Obter os dados do formulário
         email = request.form['form_email']
@@ -319,7 +320,7 @@ def login():
         # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
         with pool.connect() as db_conn:
                     # insert into database
-                    select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto, salt from tito_usuarios WHERE email=:email")
+                    select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto, salt FROM tito_usuarios WHERE email=:email")
                     result = db_conn.execute(select_Cpf, parameters={"email": email, "sen": sen}).fetchall()
                     # Do something with the results
                     db_conn.commit()
@@ -330,15 +331,18 @@ def login():
                     except TimeoutError:
                         # Tratamento do erro TimeoutError
                         pass
-        
-        if tamResult>0:
-            if bcrypt.checkpw(sen.encode('utf-8'), result[2].encode('utf-8') + result[0].encode('utf-8')):
-                session['username'] = result[1]
-                return redirect(url_for('painelacompanhamento'))
-            else:
-                return render_template('efetuarlogin.html', erro=True)
-        else:
-                return render_template('efetuarlogin.html', erro=True)
+                    
+                    if tamResult>0:
+                        senhaCriptografada = result[0]
+                        salt_do_banco = result[2]
+                        print(senhaCriptografada," ±±±±±±± ",salt_do_banco)
+                        if bcrypt.checkpw(sen.encode('utf-8'), salt_do_banco.encode('utf-8') + senhaCriptografada.encode('utf-8')):
+                            session['username'] = result[1]
+                            return redirect(url_for('painelacompanhamento'))
+                        else:
+                            return render_template('efetuarlogin.html', erro=True)
+                    else:
+                            return render_template('efetuarlogin.html', erro=True)
     return render_template('efetuarlogin.html')
 
 
