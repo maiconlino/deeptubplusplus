@@ -319,7 +319,7 @@ def login():
         # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
         with pool.connect() as db_conn:
                     # insert into database
-                    select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto from tito_usuarios WHERE email=:email")
+                    select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto, salt from tito_usuarios WHERE email=:email")
                     result = db_conn.execute(select_Cpf, parameters={"email": email, "sen": sen}).fetchall()
                     # Do something with the results
                     db_conn.commit()
@@ -332,7 +332,7 @@ def login():
                         pass
         
         if tamResult>0:
-            if bcrypt.checkpw(sen.encode('utf-8'), result[0]):
+            if bcrypt.checkpw(sen.encode('utf-8'), result[2].encode('utf-8') + result[0].encode('utf-8')):
                 session['username'] = result[1]
                 return redirect(url_for('painelacompanhamento'))
             else:
