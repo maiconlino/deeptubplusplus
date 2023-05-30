@@ -217,56 +217,59 @@ function ocultarModalCarregamento() {
                   {% else %}
                   {% endif %}
 
+                  {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+                    <div class="alert alert-info">Você já está logado no sistema <strong>{{ session["nomeCompleto"] }}</strong>. Acesse a página do prognóstico ou o módulo de acompanhamento do paciente.</div>
+                  {% else %}
+                          <br/>
+                          <div class="form-group row">
+                            <label for="form_nome_completo" class="col-sm-4 col-form-label"><h5>Nome completo:</h5></label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_nome_completo" name="form_nome_completo" placeholder="Seu nome completo aqui..." required>
+                            </div>
+                          </div>
+                      
+                        <div class="form-group row">
+                            <label for="form_cpf" class="col-sm-4 col-form-label"><h5>CPF:</h5></label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control form-control-lg"  aria-describedby="inputGroup-sizing-lg" id="form_cpf" name="form_cpf" maxlength="14" required>
+                              <div id="mensagemCPFCadastrado"></div>
+                            </div>
+                        </div>
 
-                  <br/>
-                  <div class="form-group row">
-                    <label for="form_nome_completo" class="col-sm-4 col-form-label"><h5>Nome completo:</h5></label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_nome_completo" name="form_nome_completo" placeholder="Seu nome completo aqui..." required>
-                    </div>
-                  </div>
-              
-                <div class="form-group row">
-                    <label for="form_cpf" class="col-sm-4 col-form-label"><h5>CPF:</h5></label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control form-control-lg"  aria-describedby="inputGroup-sizing-lg" id="form_cpf" name="form_cpf" maxlength="14" required>
-                      <div id="mensagemCPFCadastrado"></div>
-                    </div>
-                </div>
+                        <div class="form-group row">
+                          <label for="form_email" class="col-sm-4 col-form-label"><h5>E-mail:</h5></label>
+                          <div class="col-sm-8">
+                            <input type="email" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_email" placeholder="seuemail@dominio.com.br" name="form_email" required>
+                            <small>O seu e-mail será o seu usuário de acesso.</small>
+                            <div id="mensagemEmailCadastrado"></div>
+                          </div>
+                        </div>
 
-                <div class="form-group row">
-                  <label for="form_email" class="col-sm-4 col-form-label"><h5>E-mail:</h5></label>
-                  <div class="col-sm-8">
-                    <input type="email" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_email" placeholder="seuemail@dominio.com.br" name="form_email" required>
-                    <small>O seu e-mail será o seu usuário de acesso.</small>
-                    <div id="mensagemEmailCadastrado"></div>
-                  </div>
-                </div>
+                        <div class="form-group row">
+                          <label for="form_sen" class="col-sm-4 col-form-label"><h5>Senha:</h5></label>
+                          <div class="col-sm-8">
+                            <input type="password" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg"  id="form_sen" name="form_sen" minlength="6" required>
+                          </div>
+                          <small id="mensagemSenhaTamanho" class="form-text text-danger"></small>
+                        </div>
 
-                <div class="form-group row">
-                  <label for="form_sen" class="col-sm-4 col-form-label"><h5>Senha:</h5></label>
-                  <div class="col-sm-8">
-                    <input type="password" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg"  id="form_sen" name="form_sen" minlength="6" required>
-                  </div>
-                  <small id="mensagemSenhaTamanho" class="form-text text-danger"></small>
-                </div>
-
-                <div class="form-group row">
-                  <label for="form_senc" class="col-sm-4 col-form-label"><h5>Confirme a senha:</h5></label>
-                  <div class="col-sm-8">
-                    <input type="password" class="form-control form-control-lg"  aria-describedby="inputGroup-sizing-lg" id="form_senc" name="form_senc" minlength="6" required>
-                  </div>
-                  <small id="mensagemSenhaTamanho2" class="form-text text-danger"></small>
-                </div>
-                <br/>
-                
-                <div class="form-group row">
-                  <small id="mensagemSenha"></small>
-                  <div class="col-md-6 offset-md-3 text-center">
-                    <div id="recaptcha"></div>
-                    <button class="btn btn-danger" type="button" onclick="submeterFormulario()" id="botaoCadastro">Cadastrar</button>
-                  </div>
-                </div>
+                        <div class="form-group row">
+                          <label for="form_senc" class="col-sm-4 col-form-label"><h5>Confirme a senha:</h5></label>
+                          <div class="col-sm-8">
+                            <input type="password" class="form-control form-control-lg"  aria-describedby="inputGroup-sizing-lg" id="form_senc" name="form_senc" minlength="6" required>
+                          </div>
+                          <small id="mensagemSenhaTamanho2" class="form-text text-danger"></small>
+                        </div>
+                        <br/>
+                        
+                        <div class="form-group row">
+                          <small id="mensagemSenha"></small>
+                          <div class="col-md-6 offset-md-3 text-center">
+                            <div id="recaptcha"></div>
+                            <button class="btn btn-danger" type="button" onclick="submeterFormulario()" id="botaoCadastro">Cadastrar</button>
+                          </div>
+                        </div>
+                    {% endif %}
         </form>
 
     </div>

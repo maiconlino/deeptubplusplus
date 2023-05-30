@@ -192,29 +192,32 @@ function ocultarModalCarregamento() {
                     <div class="alert alert-danger">Não foi possível efetuar o seu login. Usuário ou senha inválidos.</div>
                   {% else %}
                   {% endif %}
+                  {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+                     <div class="alert alert-info">Você já está logado no sistema <strong>{{ session["nomeCompleto"] }}</strong>. Acesse a página do prognóstico ou o módulo de acompanhamento do paciente.</div>
+                  {% else %}
+                      <div class="form-group row">
+                        <label for="form_email" class="col-sm-4 col-form-label"><h5>E-mail:</h5></label>
+                        <div class="col-sm-8">
+                          <input type="email" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_email" placeholder="seuemail@dominio.com.br" name="form_email" required>
+                        </div>
+                      </div>
 
-                <div class="form-group row">
-                  <label for="form_email" class="col-sm-4 col-form-label"><h5>E-mail:</h5></label>
-                  <div class="col-sm-8">
-                    <input type="email" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_email" placeholder="seuemail@dominio.com.br" name="form_email" required>
-                  </div>
-                </div>
+                      <div class="form-group row">
+                        <label for="form_sen" class="col-sm-4 col-form-label"><h5>Senha:</h5></label>
+                        <div class="col-sm-8">
+                          <input type="password" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg"  id="form_sen" name="form_sen" minlength="6" required>
+                        </div>
+                      </div>
 
-                <div class="form-group row">
-                  <label for="form_sen" class="col-sm-4 col-form-label"><h5>Senha:</h5></label>
-                  <div class="col-sm-8">
-                    <input type="password" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg"  id="form_sen" name="form_sen" minlength="6" required>
-                  </div>
-                </div>
-
-                
-                <div class="form-group row">
-                  <small id="mensagemSenha"></small>
-                  <div class="col-md-6 offset-md-3 text-center">
-                    <div id="recaptcha"></div>
-                    <button class="btn btn-danger" type="button" onclick="submeterFormulario()" id="botaoCadastro">Entrar no sistema</button>
-                  </div>
-                </div>
+                      
+                      <div class="form-group row">
+                        <small id="mensagemSenha"></small>
+                        <div class="col-md-6 offset-md-3 text-center">
+                          <div id="recaptcha"></div>
+                          <button class="btn btn-danger" type="button" onclick="submeterFormulario()" id="botaoCadastro">Entrar no sistema</button>
+                        </div>
+                      </div>
+                  {% endif %}
         </form>
 
     </div>
