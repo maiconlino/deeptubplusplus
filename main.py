@@ -321,7 +321,7 @@ def login():
         with pool.connect() as db_conn:
                     # insert into database
                     select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto, salt FROM tito_usuarios WHERE email=:email")
-                    result = db_conn.execute(select_Cpf, parameters={"email": email, "sen": sen}).fetchall()
+                    result = db_conn.execute(select_Cpf, parameters={"email": email}).fetchall()
                     # Do something with the results
                     db_conn.commit()
                     tamResult = len(result)
