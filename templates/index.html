@@ -43,8 +43,8 @@
       </div>
       <div class="social-links d-none d-md-flex align-items-center">
       <div>  
-        {% if session["username"] is defined and session["username"]!="" %}
-          Olá, <strong>{{ session["username"] }}</strong> seja bem-vindo(a)! <a href="/logout">Sair</a>
+        {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+          Olá, <strong>{{ session["nomeCompleto"] }}</strong> seja bem-vindo(a)! <a href="/logout">Sair</a>
         {% else %}
             <!-- O código para caso o usuário seja vazio -->
         {% endif %}

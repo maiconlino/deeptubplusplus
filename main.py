@@ -348,6 +348,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
+    session.pop('nomeCompleto', None)
     return render_template("index.html")
 
 if __name__ == "__main__":
