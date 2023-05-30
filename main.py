@@ -212,9 +212,9 @@ def cadastro():
             #print(senha_criptografada.decode('utf-8'))
              # insert statement
             insert_stmt = sqlalchemy.text("""INSERT INTO tito_usuarios 
-                        (nomeCompleto, cpf, senhaCriptografada, email) 
+                        (nomeCompleto, cpf, senhaCriptografada, email, salt) 
                         VALUES 
-                        (:nomeCompleto, :cpf, :senhaCriptografada, :email)""",
+                        (:nomeCompleto, :cpf, :senhaCriptografada, :email, :salt)""",
             )
 
             with pool.connect() as db_conn:
@@ -231,7 +231,7 @@ def cadastro():
                         jaExisteNoBancoDeDados = True
                         break
                 if not(jaExisteNoBancoDeDados):
-                         db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email})
+                         db_conn.execute(insert_stmt, parameters={"nomeCompleto": form_nome_completo,"cpf": form_cpf,"senhaCriptografada": senha_criptografada,"email": form_email,"salt": salt})
                          db_conn.commit()
 
             try:
