@@ -333,6 +333,7 @@ def login():
                         pass
                     
                     if tamResult>0:
+                        print(result)
                         senhaCriptografada = result[0]
                         salt_do_banco = result[2]
                         print(senhaCriptografada," ±±±±±±± ",salt_do_banco)
