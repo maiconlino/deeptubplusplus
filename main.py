@@ -120,20 +120,33 @@ def processar_formulario():
     
     value=str(prognosis[1])
 
-    # insert statement
-    insert_stmt = sqlalchemy.text(
-        """INSERT INTO tito_classificacoes 
-                   (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita) 
-                   VALUES 
-                   (:idade, :tipo_de_tratamento, :radiografia_do_torax, :teste_tuberculineo, :forma_tuberculose, :agravos_doenca_mental, :hiv, :baciloscopia_1_amostra, :baciloscopia_2_amostra, :baciloscopia_6_mes, :dias_em_tratamento, :classificacao_predita, :probabilidade_predita)""",
-    )
+    #ver se o usuário está logado se sim insere o paciente para aquele usuário
+    if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
+        # insert statement
+        insert_stmt = sqlalchemy.text(
+            """INSERT INTO tito_classificacoes 
+                    (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita, id_tito_usuario) 
+                    VALUES 
+                    (:idade, :tipo_de_tratamento, :radiografia_do_torax, :teste_tuberculineo, :forma_tuberculose, :agravos_doenca_mental, :hiv, :baciloscopia_1_amostra, :baciloscopia_2_amostra, :baciloscopia_6_mes, :dias_em_tratamento, :classificacao_predita, :probabilidade_predita, :id_tito_usuario)"""
+        )
+        with pool.connect() as db_conn:
+            # insert into database
+            db_conn.execute(insert_stmt, parameters={"idade": form_idade_do_paciente, "tipo_de_tratamento": form_tipo_de_tratamento, "radiografia_do_torax": form_radiografia_torax, "teste_tuberculineo":form_teste_tuberculinio, "forma_tuberculose":form_forma_da_tuberculose, "agravos_doenca_mental":form_agravos_doenca_mental, "hiv":form_hiv, "baciloscopia_1_amostra":form_bacilosc_e, "baciloscopia_2_amostra":form_bacilosc_e2, "baciloscopia_6_mes":form_bacilosc_6, "dias_em_tratamento":form_dias_em_tratamento, "classificacao_predita":prognosis[0], "probabilidade_predita":value, "id_tito_usuario":session["identificadorUsuario"]})
+            db_conn.commit()
+        connector.close()
+    else:
+        insert_stmt = sqlalchemy.text(
+            """INSERT INTO tito_classificacoes 
+                    (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita) 
+                    VALUES 
+                    (:idade, :tipo_de_tratamento, :radiografia_do_torax, :teste_tuberculineo, :forma_tuberculose, :agravos_doenca_mental, :hiv, :baciloscopia_1_amostra, :baciloscopia_2_amostra, :baciloscopia_6_mes, :dias_em_tratamento, :classificacao_predita, :probabilidade_predita)"""
+        )
+        with pool.connect() as db_conn:
+            # insert into database
+            db_conn.execute(insert_stmt, parameters={"idade": form_idade_do_paciente, "tipo_de_tratamento": form_tipo_de_tratamento, "radiografia_do_torax": form_radiografia_torax, "teste_tuberculineo":form_teste_tuberculinio, "forma_tuberculose":form_forma_da_tuberculose, "agravos_doenca_mental":form_agravos_doenca_mental, "hiv":form_hiv, "baciloscopia_1_amostra":form_bacilosc_e, "baciloscopia_2_amostra":form_bacilosc_e2, "baciloscopia_6_mes":form_bacilosc_6, "dias_em_tratamento":form_dias_em_tratamento, "classificacao_predita":prognosis[0], "probabilidade_predita":value})
+            db_conn.commit()
+        connector.close()
 
-    with pool.connect() as db_conn:
-        # insert into database
-        db_conn.execute(insert_stmt, parameters={"idade": form_idade_do_paciente, "tipo_de_tratamento": form_tipo_de_tratamento, "radiografia_do_torax": form_radiografia_torax, "teste_tuberculineo":form_teste_tuberculinio, "forma_tuberculose":form_forma_da_tuberculose, "agravos_doenca_mental":form_agravos_doenca_mental, "hiv":form_hiv, "baciloscopia_1_amostra":form_bacilosc_e, "baciloscopia_2_amostra":form_bacilosc_e2, "baciloscopia_6_mes":form_bacilosc_6, "dias_em_tratamento":form_dias_em_tratamento, "classificacao_predita":prognosis[0], "probabilidade_predita":value})
-        db_conn.commit()
-    connector.close()
-   
     
 
     ListaResultado = []
@@ -320,7 +333,7 @@ def login():
         # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
         with pool.connect() as db_conn:
                     # insert into database
-                    select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto, salt FROM tito_usuarios WHERE email=:email")
+                    select_Cpf = sqlalchemy.text("SELECT senhaCriptografada, nomeCompleto, salt, id FROM tito_usuarios WHERE email=:email")
                     result = db_conn.execute(select_Cpf, parameters={"email": email}).fetchall()
                     # Do something with the results
                     db_conn.commit()
@@ -337,6 +350,7 @@ def login():
                         if bcrypt.checkpw(sen.encode('utf-8'),senhaCriptografada.encode('utf-8')):
                             session['username'] = email
                             session['nomeCompleto'] = result[0][1]
+                            session['identificadorUsuario'] = result[0][3]
                             return redirect(url_for('painelacompanhamento'))
                         else:
                             return render_template('efetuarlogin.html', erro=True)
@@ -349,6 +363,7 @@ def login():
 def logout():
     session.pop('username', None)
     session.pop('nomeCompleto', None)
+    session.pop('identificadorUsuario', None)
     return render_template("index.html")
 
 if __name__ == "__main__":
