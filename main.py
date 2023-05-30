@@ -334,11 +334,11 @@ def login():
                     
                     if tamResult>0:
                         print(result)
-                        senhaCriptografada = result[0]
-                        salt_do_banco = result[2]
+                        senhaCriptografada = result[0][0]
+                        salt_do_banco = result[0][2]
                         print(senhaCriptografada," ±±±±±±± ",salt_do_banco)
                         if bcrypt.checkpw(sen.encode('utf-8'), salt_do_banco.encode('utf-8') + senhaCriptografada.encode('utf-8')):
-                            session['username'] = result[1]
+                            session['username'] = result[0][1]
                             return redirect(url_for('painelacompanhamento'))
                         else:
                             return render_template('efetuarlogin.html', erro=True)
