@@ -15,6 +15,7 @@ import sqlalchemy
 import pymysql
 import bcrypt
 from concurrent.futures import TimeoutError
+import random
 
     #import mysql.connector
 
@@ -375,6 +376,79 @@ def logout():
     session.pop('nomeCompleto', None)
     session.pop('identificadorUsuario', None)
     return render_template("index.html")
+
+
+@app.route('/pacientes', methods=['GET', 'POST'])
+def pacientes():
+    if request.method == 'POST':
+        nome_completo = request.form['nome_completo']
+        apelido_alias = request.form['apelido_alias']
+        data_diagnostico = request.form['data_diagnostico']
+
+        # Realize as operações necessárias para abreviar o nome completo e criptografar o ID
+
+        # Insere o novo paciente no banco de dados
+       
+    if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
+        # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
+        with pool.connect() as db_conn:
+                        # insert into database
+                        select_Pacientes = sqlalchemy.text("SELECT * id FROM tito_pacientes WHERE id_tito_usuarios=:id_tito_usuarios")
+                        pacientes = db_conn.execute(select_Pacientes, parameters={"id_tito_usuarios": session['identificadorUsuario']}).fetchall()
+                        # Do something with the results
+                        db_conn.commit()
+                        try:
+                            # Seu código aqui que pode gerar um TimeoutError
+                            connector.close()  
+                        except TimeoutError:
+                            # Tratamento do erro TimeoutError
+                            pass
+                        return render_template("pacientes.html", pacientes=pacientes)
+    else:
+        return render_template("pacientes.html")
+
+@app.route('/cadastrarpaciente', methods=['GET', 'POST'])
+def cadastrarpaciente():
+    senha_criptografada = ""
+    if request.method == 'POST':
+        # Obter os dados do formulário
+        form_apelido = request.form['form_apelido']
+        form_dataDiagnostico = request.form['form_dataDiagnostico']
+        form_apelidoCript = form_apelido + random.randint(10**9, 10**10 - 1)
+       
+
+        #validacao back-end seguranca se o usuario desativar javascript ou manipula-lo no front
+        vazio = False
+        if form_apelido=="" or form_dataDiagnostico=="":
+            vazio = True
+
+        if vazio:
+            submissao = False
+        else:
+            submissao = True
+
+             # insert statement
+            insert_stmt = sqlalchemy.text("""INSERT INTO tito_pacientes 
+                        (nomeCompletoAbreviadoComIdCriptografado, apelidoAlias, dataDoDiagnostico, id_tito_usuarios) 
+                        VALUES 
+                        (:nomeCompletoAbreviadoComIdCriptografado, :apelidoAlias, :dataDoDiagnostico, :id_tito_usuarios)""",
+            )
+
+            with pool.connect() as db_conn:
+
+                         db_conn.execute(insert_stmt, parameters={"nomeCompletoAbreviadoComIdCriptografado": form_apelidoCript,"apelidoAlias": form_apelido,"dataDoDiagnostico": form_dataDiagnostico,"id_tito_usuarios":  session['identificadorUsuario']})
+                         db_conn.commit()
+            try:
+            # Seu código aqui que pode gerar um TimeoutError
+                connector.close()  
+            except TimeoutError:
+                # Tratamento do erro TimeoutError
+                pass
+             
+        return render_template('paciente.html', submissao=submissao, paciente=form_apelidoCript)
+
+    return render_template('paciente.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
