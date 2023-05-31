@@ -378,22 +378,13 @@ def logout():
     return render_template("index.html")
 
 
-@app.route('/pacientes', methods=['GET', 'POST'])
-def pacientes():
-    if request.method == 'POST':
-        nome_completo = request.form['nome_completo']
-        apelido_alias = request.form['apelido_alias']
-        data_diagnostico = request.form['data_diagnostico']
-
-        # Realize as operações necessárias para abreviar o nome completo e criptografar o ID
-
-        # Insere o novo paciente no banco de dados
-       
+@app.route('/pacientes')
+def pacientes():       
     if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
         # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
         with pool.connect() as db_conn:
                         # insert into database
-                        select_Pacientes = sqlalchemy.text("SELECT * id FROM tito_pacientes WHERE id_tito_usuarios=:id_tito_usuarios")
+                        select_Pacientes = sqlalchemy.text("SELECT * FROM tito_pacientes WHERE id_tito_usuarios=:id_tito_usuarios")
                         pacientes = db_conn.execute(select_Pacientes, parameters={"id_tito_usuarios": session['identificadorUsuario']}).fetchall()
                         # Do something with the results
                         db_conn.commit()
