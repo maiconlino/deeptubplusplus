@@ -405,7 +405,7 @@ def cadastrarpaciente():
         # Obter os dados do formulário
         form_apelido = request.form['form_apelido']
         form_dataDiagnostico = request.form['form_dataDiagnostico']
-        form_apelidoCript = form_apelido + random.randint(10**9, 10**10 - 1)
+        form_apelidoCript = form_apelido + str(random.randint(10**9, 10**10 - 1))
        
 
         #validacao back-end seguranca se o usuario desativar javascript ou manipula-lo no front
