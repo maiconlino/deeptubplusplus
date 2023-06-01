@@ -379,7 +379,13 @@ def logout():
 
 
 @app.route('/pacientes')
-def pacientes():       
+def pacientes():  
+    if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
+          return render_template("pacientes.html")     
+    return render_template("index.html")
+
+@app.route('/pacientes_ver')
+def pacientes_ver(): 
     if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
         # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
         with pool.connect() as db_conn:
@@ -395,8 +401,7 @@ def pacientes():
                             # Tratamento do erro TimeoutError
                             pass
                         return render_template("pacientes_ver.html", pacientes=pacientes)
-    else:
-        return render_template("pacientes.html")
+    return render_template("index.html")
 
 @app.route('/cadastrarpaciente', methods=['GET', 'POST'])
 def cadastrarpaciente():
