@@ -405,11 +405,11 @@ function formatarDataEHora(data) {
 <script>
   // Obtém todos os elementos com a classe 'data-diagnostico'
   elementosData = document.getElementById('data-diagnostico');
-  dataFormatada = formatarData(data); 
+  dataFormatada = formatarData(elementosData.textContent); 
   elementosData.textContent = dataFormatada;
 
   elementosData = document.getElementById('data-hora');
-  dataFormatada = formatarDataEHora(data); 
+  dataFormatada = formatarDataEHora(elementosData.textContent); 
   elementosData.textContent = dataFormatada;
 </script>
 
