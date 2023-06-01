@@ -209,14 +209,14 @@ function formatarDataEHora(data) {
     <div class="container" data-aos="fade-up">
       
         <h2 id="tituloFormulario">Esses são os pacientes que você cadastrou</h2>
-        <form action="/cadastrarpaciente" method="POST" id="FORMULARIOPACIENTE"> 
+        {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+          <div class="row">
+            <button class="btn btn-outline-danger col-lg-3" onclick="window.location.href='/pacientes'">Cadastrar pacientes</button>
+          </div>
+        {% else %}
+        {% endif %}
+        <form action="/"" method="POST" id="FORMULARIOPACIENTE"> 
              
-              {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
-              <div class="row">
-                <button class="btn btn-outline-danger col-lg-3" onclick="window.location.href='/pacientes'">Cadastrar pacientes</button>
-              </div>
-            {% else %}
-            {% endif %}
                   {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
                   <table class="table table-striped">
                     <thead>
