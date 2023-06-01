@@ -436,9 +436,9 @@ def cadastrarpaciente():
                 # Tratamento do erro TimeoutError
                 pass
              
-        return render_template('paciente.html', submissao=submissao, paciente=form_apelidoCript)
+        return render_template('pacientes.html', submissao=submissao, paciente=form_apelidoCript)
 
-    return render_template('paciente.html')
+    return render_template('pacientes.html')
 
 
 if __name__ == "__main__":
