@@ -190,7 +190,14 @@ function submeterFormulario() {
  <!-- ======= About Us Section ======= -->
  <section id="about" class="about">
     <div class="container" data-aos="fade-up">
-      
+     
+      {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+        <div class="row">
+          <button class="btn btn-info col-lg-3" onclick="window.location.href='/pacientes'">Cadastrar pacientes</button>
+          <button class="btn btn-info col-lg-3" onclick="window.location.href='/pacientes_ver'">Consultar pacientes cadastrados</button>
+        </div>
+      {% else %}
+      {% endif %}
         <h2 id="tituloFormulario">Preencha os dados do paciente</h2>
         <form action="/prognostico_form" method="POST" id="FORMULARIOPROGNOSTICO"> 
           <div id="first-screen">

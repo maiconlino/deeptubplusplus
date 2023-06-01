@@ -193,7 +193,12 @@ function ocultarModalCarregamento() {
         <h2 id="tituloFormulario">Cadastre um novo paciente</h2>
         <form action="/cadastrarpaciente" method="POST" id="FORMULARIOPACIENTE"> 
              
-                  
+          {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+          <div class="row">
+            <button class="btn btn-info col-lg-3" onclick="window.location.href='/pacientes_ver'">Consultar pacientes cadastrados</button>
+          </div>
+        {% else %}
+        {% endif %}
                   {% if submissao == False %}
                     <div class="alert alert-danger">Houve algum erro com o cadastro do paciente.</div>
                   {% elif submissao == True %}
