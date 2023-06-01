@@ -394,7 +394,7 @@ def pacientes():
                         except TimeoutError:
                             # Tratamento do erro TimeoutError
                             pass
-                        return render_template("pacientes_ver.html", paciente=pacientes)
+                        return render_template("pacientes_ver.html", pacientes=pacientes)
     else:
         return render_template("pacientes.html")
 
