@@ -55,7 +55,25 @@ function ocultarModalCarregamento() {
 }
 
 
+function formatarData(data) {
+  const partes = data.split("-");
+  const dia = partes[2];
+  const mes = partes[1];
+  const ano = partes[0];
+  return dia + "/" + mes + "/" + ano;
+}
 
+function formatarDataEHora(data) {
+  const partesData = data.split(" ")[0].split("-");
+  const partesHora = data.split(" ")[1].split(":");
+  const dia = partesData[2];
+  const mes = partesData[1];
+  const ano = partesData[0];
+  const hora = partesHora[0];
+  const minuto = partesHora[1];
+  const segundo = partesHora[2];
+  return dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto + ":" + segundo;
+}
     </script>
 
     
@@ -196,8 +214,8 @@ function ocultarModalCarregamento() {
 
                   {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
                   <h1 id="tituloFormulario">Lista de Pacientes</h1>
-                  <table>
-                      <thead>
+                  <table class="table table-striped">
+                    <thead>
                           <tr>
                               <th>Apelido/Alias</th>
                               <th>Data do Diagnóstico</th>
@@ -208,8 +226,8 @@ function ocultarModalCarregamento() {
                           {% for paciente in pacientes %}
                           <tr>
                               <td>{{ paciente.nomeCompletoAbreviadoComIdCriptografado }}</td>
-                              <td>{{ paciente.dataDoDiagnostico }}</td>
-                              <td>{{ paciente.dataHora }}</td>
+                              <td class="data-diagnostico">{{ paciente.dataDoDiagnostico }}</td>
+                              <td class="data-hora">{{ paciente.dataHora }}</td>
                           </tr>
                           {% endfor %}
                       </tbody>
@@ -379,6 +397,31 @@ function ocultarModalCarregamento() {
       });
   });
 </script>
+
+<script>
+  // Obtém todos os elementos com a classe 'data-diagnostico'
+  const elementosData = document.querySelectorAll('.data-diagnostico');
+
+  // Itera sobre cada elemento e formata a data
+  elementosData.forEach(elemento => {
+    const data = elemento.textContent;
+    const dataFormatada = formatarData(data); // Utilize a função formatarData() do exemplo anterior
+
+    elemento.textContent = dataFormatada;
+  });
+
+  const elementosData = document.querySelectorAll('.data-hora');
+
+  // Itera sobre cada elemento e formata a data
+  elementosData.forEach(elemento => {
+    const data = elemento.textContent;
+    const dataFormatada = formatarDataEHora(data); // Utilize a função formatarData() do exemplo anterior
+
+    elemento.textContent = dataFormatada;
+  });
+</script>
+
+
 </body>
 
 </html>
