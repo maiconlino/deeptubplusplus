@@ -201,7 +201,6 @@ function ocultarModalCarregamento() {
                           <tr>
                               <th>ID</th>
                               <th>Nome Completo Abreviado</th>
-                              <th>Apelido/Alias</th>
                               <th>Data do Diagnóstico</th>
                               <th>Ações</th>
                           </tr>
@@ -210,9 +209,8 @@ function ocultarModalCarregamento() {
                           {% for paciente in pacientes %}
                           <tr>
                               <td>{{ paciente.id }}</td>
-                              <td>{{ paciente.nome_completo_abreviado }}</td>
-                              <td>{{ paciente.apelido_alias }}</td>
-                              <td>{{ paciente.data_diagnostico }}</td>
+                              <td>{{ paciente.nomeCompletoAbreviadoComIdCriptografado }}</td>
+                              <td>{{ paciente.dataDoDiagnostico }}</td>
                               <td>
                                   <a href="{{ url_for('edit', id=paciente.id) }}">Editar</a>
                                   <a href="{{ url_for('delete', id=paciente.id) }}">Deletar</a>
