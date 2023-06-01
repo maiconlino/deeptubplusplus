@@ -230,8 +230,8 @@ function formatarDataEHora(data) {
                           {% for paciente in pacientes %}
                           <tr>
                               <td>{{ paciente.nomeCompletoAbreviadoComIdCriptografado }}</td>
-                              <td id="data-diagnostico">{{ paciente.dataDoDiagnostico }}</td>
-                              <td id="data-hora">{{ paciente.dataHora }}</td>
+                              <td class="data-diagnostico">{{ paciente.dataDoDiagnostico }}</td>
+                              <td class="data-hora">{{ paciente.dataHora }}</td>
                           </tr>
                           {% endfor %}
                       </tbody>
@@ -404,14 +404,28 @@ function formatarDataEHora(data) {
 
 <script>
   // Obtém todos os elementos com a classe 'data-diagnostico'
-  elementosData = document.getElementById('data-diagnostico');
-  dataFormatada = formatarData(elementosData.textContent); 
-  elementosData.textContent = dataFormatada;
+  const elementosData = document.querySelectorAll('.data-diagnostico');
 
-  elementosData = document.getElementById('data-hora');
-  dataFormatada = formatarDataEHora(elementosData.textContent); 
-  elementosData.textContent = dataFormatada;
+  // Itera sobre cada elemento e formata a data
+  elementosData.forEach(elemento => {
+    const data = elemento.textContent;
+    const dataFormatada = formatarData(data); // Utilize a função formatarData() do exemplo anterior
+
+    elemento.textContent = dataFormatada;
+  });
+
+    // Obtém todos os elementos com a classe 'data-diagnostico'
+    const elementosData = document.querySelectorAll('.data-hora');
+
+    // Itera sobre cada elemento e formata a data
+    elementosData.forEach(elemento => {
+      const data = elemento.textContent;
+      const dataFormatada = formatarDataEhora(data); // Utilize a função formatarData() do exemplo anterior
+
+      elemento.textContent = dataFormatada;
+    });
 </script>
+
 
 
 </body>
