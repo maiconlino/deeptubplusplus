@@ -214,6 +214,7 @@ function formatarDataEHora(data) {
             <button class="btn btn-outline-danger col-lg-3" onclick="window.location.href='/pacientes'">Cadastrar pacientes</button>
           </div>
         {% else %}
+          <div class="alert alert-danger">Para ter acesso ao módulo de acompanhamento do paciente, você precisa estar cadastrado e efetuar login.</div>
         {% endif %}
         <form action="/" method="POST" id="FORMULARIOPACIENTE"> 
              

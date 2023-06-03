@@ -456,6 +456,14 @@ def pacientes_ver():
     #                     return render_template("pacientes_ver.html", pacientes=pacientes)
     # return render_template("index.html")
 
+@app.route('/acompanhamento')
+def pacientes_ver(): 
+    pacientes = listar_pacientes()
+    if pacientes != "":
+        return render_template("pacientes_ver.html", pacientes=pacientes)
+    else:
+         return render_template("pacientes_ver.html")
+    
 @app.route('/cadastrarpaciente', methods=['GET', 'POST'])
 def cadastrarpaciente():
     senha_criptografada = ""
