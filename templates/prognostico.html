@@ -196,6 +196,7 @@ function submeterFormulario() {
           <button class="btn btn-outline-danger col-lg-3" onclick="window.location.href='/pacientes'">Cadastrar pacientes</button>&nbsp;
           <button class="btn btn-outline-danger col-lg-3" onclick="window.location.href='/pacientes_ver'">Consultar pacientes cadastrados</button>
         </div>
+        <br/>
       {% else %}
       {% endif %}
         <h2 id="tituloFormulario">Preencha os dados do paciente</h2>
@@ -213,7 +214,7 @@ function submeterFormulario() {
                               <select class="form-select form-control-lg" id="form_paciente" name="form_paciente" required>
                                 <option selected disabled value="">selecione...</option>
                                 {% for paciente in pacientes %}
-                                  <option value={{ paciente.id }}>{{ paciente.nomeCompletoAbreviadoComIdCriptografado }}</option>
+                                  <option value={{ paciente.id ~ "|" ~ paciente.dataDoDiagnostico }}>{{ paciente.nomeCompletoAbreviadoComIdCriptografado }}</option>
                                 {% endfor %}
                               </select>
                             </div>
@@ -513,6 +514,33 @@ function submeterFormulario() {
         }, 3000);
       }
     });
+
+
+
+
+  $(document).ready(function() {
+  // Quando o campo form_paciente for alterado
+  $('#form_paciente').change(function() {
+    // Obtém o valor selecionado do campo form_paciente
+    var pacienteSelecionado = $(this).val();
+    
+    // Verifica se foi selecionado um paciente válido
+    if (pacienteSelecionado) {
+      // Divide o valor do paciente selecionado usando o caracter |
+      var pacienteData = pacienteSelecionado.split('|');
+      var pacienteId = pacienteData[0];
+      var dataDiagnostico = pacienteData[1];
+      
+      // Calcula a quantidade de dias entre a data do diagnóstico e a data atual
+      var dataAtual = new Date();
+      var diasEmTratamento = Math.floor((dataAtual - new Date(dataDiagnostico)) / (1000 * 60 * 60 * 24));
+      
+      // Preenche o campo form_dias_em_tratamento com o resultado
+      $('#form_dias_em_tratamento').val(diasEmTratamento);
+    }
+  });
+});
+
   </script>
 
 
