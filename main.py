@@ -457,7 +457,7 @@ def pacientes_ver():
     # return render_template("index.html")
 
 @app.route('/acompanhamento')
-def pacientes_ver(): 
+def acompanhamento(): 
     pacientes = listar_pacientes()
     if pacientes != "":
         return render_template("pacientes_ver.html", pacientes=pacientes)
