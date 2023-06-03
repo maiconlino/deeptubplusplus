@@ -93,11 +93,33 @@ def prognosis_tuberculosis(input_data):
 def index():
     return render_template("index.html")
 
+def listar_pacientes():
+    if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
+    # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
+        with pool.connect() as db_conn:
+            # insert into database
+            select_Pacientes = sqlalchemy.text("SELECT * FROM tito_pacientes WHERE id_tito_usuarios=:id_tito_usuarios")
+            pacientes = db_conn.execute(select_Pacientes, parameters={"id_tito_usuarios": session['identificadorUsuario']}).fetchall()
+            # Do something with the results
+            db_conn.commit()
+            try:
+                # Seu código aqui que pode gerar um TimeoutError
+                connector.close()  
+            except TimeoutError:
+                # Tratamento do erro TimeoutError
+                pass
+            return pacientes
+    else:
+         return ""
 
 
 @app.route("/prognostico")
 def prognostico():
-    return render_template("prognostico.html")
+    pacientes = listar_pacientes()
+    if pacientes != "":
+        return render_template("prognostico.html", pacientes=pacientes)
+    else:
+         return render_template("prognostico.html")
 
 @app.route('/prognostico_form', methods=['POST'])
 def processar_formulario():
@@ -115,7 +137,11 @@ def processar_formulario():
     form_bacilosc_6 = dados['form_bacilosc_6']
     form_dias_em_tratamento = dados['form_dias_em_tratamento']
 
-    
+    form_paciente = ""
+    if 'form_paciente' in request.form:
+        form_paciente = form_paciente = dados['form_paciente']
+
+
     # Faça o processamento necessário com os dados
     prognosis = prognosis_tuberculosis([form_idade_do_paciente, form_tipo_de_tratamento, form_radiografia_torax, form_teste_tuberculinio, form_forma_da_tuberculose, form_agravos_doenca_mental, form_bacilosc_e, form_bacilosc_e2, form_hiv, form_bacilosc_6, form_dias_em_tratamento])
     
@@ -123,23 +149,44 @@ def processar_formulario():
 
     #ver se o usuário está logado se sim insere o paciente para aquele usuário
     if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
-        # insert statement
-        insert_stmt = sqlalchemy.text(
+
+        if form_paciente != "":
+            #existe o paciente selecionado
+            insert_stmt = sqlalchemy.text(
             """INSERT INTO tito_classificacoes 
-                    (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita, id_tito_usuarios) 
+                    (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita, id_tito_usuarios, id_tito_pacientes) 
                     VALUES 
-                    (:idade, :tipo_de_tratamento, :radiografia_do_torax, :teste_tuberculineo, :forma_tuberculose, :agravos_doenca_mental, :hiv, :baciloscopia_1_amostra, :baciloscopia_2_amostra, :baciloscopia_6_mes, :dias_em_tratamento, :classificacao_predita, :probabilidade_predita, :id_tito_usuarios)"""
-        )
-        with pool.connect() as db_conn:
-            # insert into database
-            db_conn.execute(insert_stmt, parameters={"idade": form_idade_do_paciente, "tipo_de_tratamento": form_tipo_de_tratamento, "radiografia_do_torax": form_radiografia_torax, "teste_tuberculineo":form_teste_tuberculinio, "forma_tuberculose":form_forma_da_tuberculose, "agravos_doenca_mental":form_agravos_doenca_mental, "hiv":form_hiv, "baciloscopia_1_amostra":form_bacilosc_e, "baciloscopia_2_amostra":form_bacilosc_e2, "baciloscopia_6_mes":form_bacilosc_6, "dias_em_tratamento":form_dias_em_tratamento, "classificacao_predita":prognosis[0], "probabilidade_predita":value, "id_tito_usuarios":session["identificadorUsuario"]})
-            db_conn.commit()
-        try:
-            # Seu código aqui que pode gerar um TimeoutError
-            connector.close()  
-        except TimeoutError:
-            # Tratamento do erro TimeoutError
-            pass
+                    (:idade, :tipo_de_tratamento, :radiografia_do_torax, :teste_tuberculineo, :forma_tuberculose, :agravos_doenca_mental, :hiv, :baciloscopia_1_amostra, :baciloscopia_2_amostra, :baciloscopia_6_mes, :dias_em_tratamento, :classificacao_predita, :probabilidade_predita, :id_tito_usuarios, :id_tito_pacientes)"""
+            )
+            with pool.connect() as db_conn:
+                # insert into database
+                db_conn.execute(insert_stmt, parameters={"idade": form_idade_do_paciente, "tipo_de_tratamento": form_tipo_de_tratamento, "radiografia_do_torax": form_radiografia_torax, "teste_tuberculineo":form_teste_tuberculinio, "forma_tuberculose":form_forma_da_tuberculose, "agravos_doenca_mental":form_agravos_doenca_mental, "hiv":form_hiv, "baciloscopia_1_amostra":form_bacilosc_e, "baciloscopia_2_amostra":form_bacilosc_e2, "baciloscopia_6_mes":form_bacilosc_6, "dias_em_tratamento":form_dias_em_tratamento, "classificacao_predita":prognosis[0], "probabilidade_predita":value, "id_tito_usuarios":session["identificadorUsuario"], "id_tito_pacientes": form_paciente})
+                db_conn.commit()
+                try:
+                    # Seu código aqui que pode gerar um TimeoutError
+                    connector.close()  
+                except TimeoutError:
+                    # Tratamento do erro TimeoutError
+                    pass
+        else:     
+            # insert statement
+            insert_stmt = sqlalchemy.text(
+                """INSERT INTO tito_classificacoes 
+                        (idade, tipo_de_tratamento, radiografia_do_torax, teste_tuberculineo, forma_tuberculose, agravos_doenca_mental, hiv, baciloscopia_1_amostra, baciloscopia_2_amostra, baciloscopia_6_mes, dias_em_tratamento, classificacao_predita, probabilidade_predita, id_tito_usuarios) 
+                        VALUES 
+                        (:idade, :tipo_de_tratamento, :radiografia_do_torax, :teste_tuberculineo, :forma_tuberculose, :agravos_doenca_mental, :hiv, :baciloscopia_1_amostra, :baciloscopia_2_amostra, :baciloscopia_6_mes, :dias_em_tratamento, :classificacao_predita, :probabilidade_predita, :id_tito_usuarios)"""
+            )
+            with pool.connect() as db_conn:
+                # insert into database
+                db_conn.execute(insert_stmt, parameters={"idade": form_idade_do_paciente, "tipo_de_tratamento": form_tipo_de_tratamento, "radiografia_do_torax": form_radiografia_torax, "teste_tuberculineo":form_teste_tuberculinio, "forma_tuberculose":form_forma_da_tuberculose, "agravos_doenca_mental":form_agravos_doenca_mental, "hiv":form_hiv, "baciloscopia_1_amostra":form_bacilosc_e, "baciloscopia_2_amostra":form_bacilosc_e2, "baciloscopia_6_mes":form_bacilosc_6, "dias_em_tratamento":form_dias_em_tratamento, "classificacao_predita":prognosis[0], "probabilidade_predita":value, "id_tito_usuarios":session["identificadorUsuario"]})
+                db_conn.commit()
+                try:
+                    # Seu código aqui que pode gerar um TimeoutError
+                    connector.close()  
+                except TimeoutError:
+                    # Tratamento do erro TimeoutError
+                    pass
+        
     else:
         insert_stmt = sqlalchemy.text(
             """INSERT INTO tito_classificacoes 
@@ -386,22 +433,28 @@ def pacientes():
 
 @app.route('/pacientes_ver')
 def pacientes_ver(): 
-    if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
-        # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
-        with pool.connect() as db_conn:
-                        # insert into database
-                        select_Pacientes = sqlalchemy.text("SELECT * FROM tito_pacientes WHERE id_tito_usuarios=:id_tito_usuarios")
-                        pacientes = db_conn.execute(select_Pacientes, parameters={"id_tito_usuarios": session['identificadorUsuario']}).fetchall()
-                        # Do something with the results
-                        db_conn.commit()
-                        try:
-                            # Seu código aqui que pode gerar um TimeoutError
-                            connector.close()  
-                        except TimeoutError:
-                            # Tratamento do erro TimeoutError
-                            pass
-                        return render_template("pacientes_ver.html", pacientes=pacientes)
-    return render_template("index.html")
+    pacientes = listar_pacientes()
+    if pacientes != "":
+        return render_template("pacientes_ver.html", pacientes=pacientes)
+    else:
+         return render_template("index.html")
+
+    # if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
+    #     # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
+    #     with pool.connect() as db_conn:
+    #                     # insert into database
+    #                     select_Pacientes = sqlalchemy.text("SELECT * FROM tito_pacientes WHERE id_tito_usuarios=:id_tito_usuarios")
+    #                     pacientes = db_conn.execute(select_Pacientes, parameters={"id_tito_usuarios": session['identificadorUsuario']}).fetchall()
+    #                     # Do something with the results
+    #                     db_conn.commit()
+    #                     try:
+    #                         # Seu código aqui que pode gerar um TimeoutError
+    #                         connector.close()  
+    #                     except TimeoutError:
+    #                         # Tratamento do erro TimeoutError
+    #                         pass
+    #                     return render_template("pacientes_ver.html", pacientes=pacientes)
+    # return render_template("index.html")
 
 @app.route('/cadastrarpaciente', methods=['GET', 'POST'])
 def cadastrarpaciente():

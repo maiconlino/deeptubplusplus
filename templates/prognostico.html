@@ -201,6 +201,26 @@ function submeterFormulario() {
         <h2 id="tituloFormulario">Preencha os dados do paciente</h2>
         <form action="/prognostico_form" method="POST" id="FORMULARIOPROGNOSTICO"> 
           <div id="first-screen">
+
+
+
+                {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+
+                         
+                          <div class="form-group row">
+                            <label for="form_paciente" class="col-sm-4 col-form-label"><h5>Paciente:</h5></label>
+                            <div class="col-sm-8">
+                              <select class="form-select form-control-lg" id="form_paciente" name="form_paciente" required>
+                                <option selected disabled value="">selecione...</option>
+                                {% for paciente in pacientes %}
+                                  <option value={{ paciente.id }}>{{ paciente.nomeCompletoAbreviadoComIdCriptografado }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                  {% else %}
+                  {% endif %}
+
                   <div class="form-group row">
                     <label for="form_idade_do_paciente" class="col-sm-4 col-form-label"><h5>Idade:</h5></label>
                     <div class="col-sm-8">
