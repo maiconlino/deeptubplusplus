@@ -75,7 +75,7 @@ function ocultarModalCarregamento() {
             <div class="modal-body">
                 <div class="text-center">
                     <i class="fa fa-spinner fa-spin fa-3x"></i>
-                    <p>Estamos efetuando <strong>o login</strong>, por favor aguarde.</p>
+                    <p>Estamos cadastrando <strong>o seu usuário</strong>, por favor aguarde.</p>
                 </div>
             </div>
         </div>
@@ -156,8 +156,8 @@ function ocultarModalCarregamento() {
       <div class="row gy-5 justify-content-center align-items-center" data-aos="fade-in">
         <div class="col-lg-6 order-2 order-lg-1 text-center">
           <img src="static/img/tito_logo_fb.png" width="90%" />
-          <h2><span>Login</span></h2>
-          <h3>Se você é um profissional de saúde, faça login abaixo para ter acesso ao módulo de acompanhamento do paciente.</h3>
+          <h2><span>Acompanhamento</span></h2>
+          <h3>Aqui você pode acompanhar as previsões realizadas pela tito para o seu paciente ao longo do tempo.</h3>
           <div class="d-flex justify-content-center justify-content-lg-start">
           </div>
         </div>
@@ -185,40 +185,8 @@ function ocultarModalCarregamento() {
  <section id="about" class="about">
     <div class="container" data-aos="fade-up">
       
-        <h2 id="tituloFormulario">Forneça o seu usuário (e-mail cadastrado) e a sua senha cadastrada.</h2>
-        <form action="/fazerlogin" method="POST" id="FORMULARIOLOGIN"> 
-             
-                  {% if erro == True %}
-                    <div class="alert alert-danger">Não foi possível efetuar o seu login. Usuário ou senha inválidos.</div>
-                  {% else %}
-                  {% endif %}
-                  {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
-                     <div class="alert alert-info">Você já está logado no sistema <strong>{{ session["nomeCompleto"] }}</strong>. Acesse a página do prognóstico ou o módulo de acompanhamento do paciente.</div>
-                  {% else %}
-                      <div class="form-group row">
-                        <label for="form_email" class="col-sm-4 col-form-label"><h5>E-mail:</h5></label>
-                        <div class="col-sm-8">
-                          <input type="email" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg" id="form_email" placeholder="seuemail@dominio.com.br" name="form_email" required>
-                        </div>
-                      </div>
-
-                      <div class="form-group row">
-                        <label for="form_sen" class="col-sm-4 col-form-label"><h5>Senha:</h5></label>
-                        <div class="col-sm-8">
-                          <input type="password" class="form-control form-control-lg" aria-describedby="inputGroup-sizing-lg"  id="form_sen" name="form_sen" minlength="6" required>
-                        </div>
-                      </div>
-
-                      
-                      <div class="form-group row">
-                        <small id="mensagemSenha"></small>
-                        <div class="col-md-6 offset-md-3 text-center">
-                          <div id="recaptcha"></div>
-                          <button class="btn btn-danger" type="button" onclick="submeterFormulario()" id="botaoCadastro">Entrar no sistema</button>
-                        </div>
-                      </div>
-                  {% endif %}
-        </form>
+        <h2 id="tituloFormulario">Gráfico.</h2>
+        
 
     </div>
   </section><!-- End About Us Section -->

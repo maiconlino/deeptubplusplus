@@ -225,6 +225,7 @@ function formatarDataEHora(data) {
                               <th>Apelido/Alias</th>
                               <th>Data do Diagnóstico</th>
                               <th>Data do Cadastro</th>
+                              <th>Acompanhamento</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -233,6 +234,7 @@ function formatarDataEHora(data) {
                               <td>{{ paciente.nomeCompletoAbreviadoComIdCriptografado }}</td>
                               <td class="data-diagnostico">{{ paciente.dataDoDiagnostico }}</td>
                               <td class="data-hora">{{ paciente.dataHora }}</td>
+                              <td><a href="/moduloacompanhamento={{ paciente.id }}"><i class="bi bi-person-lines-fill"></i></a></td>
                           </tr>
                           {% endfor %}
                       </tbody>

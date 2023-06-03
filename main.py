@@ -464,6 +464,13 @@ def acompanhamento():
     else:
          return render_template("pacientes_ver.html")
     
+@app.route('/moduloacompanhamento')
+def modulo_acompanhamento():
+    paciente_id = request.args.get('moduloacompanhamento')
+    # validar se o id do paciente passado está relacionado ao profissional de saúde
+    #pegar as predições realizadas
+    return render_template("moduloacompanhamento.html") 
+
 @app.route('/cadastrarpaciente', methods=['GET', 'POST'])
 def cadastrarpaciente():
     senha_criptografada = ""
