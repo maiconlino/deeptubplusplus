@@ -465,8 +465,8 @@ def acompanhamento():
          return render_template("pacientes_ver.html")
     
 @app.route('/moduloacompanhamento')
-def modulo_acompanhamento():
-    paciente_id = request.args.get('moduloacompanhamento')
+def moduloacompanhamento():
+    paciente_id = request.args.get('pt')
     # validar se o id do paciente passado está relacionado ao profissional de saúde
     #pegar as predições realizadas
     return render_template("moduloacompanhamento.html") 
