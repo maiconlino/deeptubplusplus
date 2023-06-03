@@ -368,9 +368,10 @@ function submeterFormulario() {
               <div class="form-group row">
                 <label for="form_dias_em_tratamento" class="col-sm-4 col-form-label"><h5>Dias em tratamento:</h5></label>
                 <div class="col-sm-8">
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="0" id="form_dias_em_tratamento" name="form_dias_em_tratamento">
-              </div>
+                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="0" id="form_dias_em_tratamento" name="form_dias_em_tratamento">
+                  <small id="mensagem" class="text-danger"></small>
                 </div>
+              </div>
                 <br/>
                 <div class="form-group row">
                   <div class="col-md-6 offset-md-3 text-center">
@@ -537,6 +538,13 @@ function submeterFormulario() {
       
       // Preenche o campo form_dias_em_tratamento com o resultado
       $('#form_dias_em_tratamento').val(diasEmTratamento);
+      
+      // Formata a data do diagnóstico no formato brasileiro (DD/MM/AAAA)
+      var dataFormatada = new Date(dataDiagnostico).toLocaleDateString('pt-BR');
+      
+      // Atualiza a mensagem abaixo do campo
+      $('#mensagem').text('Calculamos os dias em tratamento considerando a diferença entre a data do diagnóstico (' + dataFormatada + ') e a data atual.');
+   
     }
   });
 });
