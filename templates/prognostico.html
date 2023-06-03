@@ -541,9 +541,10 @@ function submeterFormulario() {
       
       // Formata a data do diagnóstico no formato brasileiro (DD/MM/AAAA)
       var dataFormatada = new Date(dataDiagnostico).toLocaleDateString('pt-BR');
+      var dataAtualFormatada = new Date(dataAtual).toLocaleDateString('pt-BR');
       
       // Atualiza a mensagem abaixo do campo
-      $('#mensagem').text('Calculamos os dias em tratamento considerando a diferença entre a data do diagnóstico (' + dataFormatada + ') e a data atual.');
+      $('#mensagem').text('Calculamos os dias em tratamento considerando a diferença entre a data do diagnóstico (' + dataFormatada + ') e a data atual (' + dataAtualFormatada + ').');
    
     }
   });
