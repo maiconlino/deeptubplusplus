@@ -194,7 +194,7 @@ function ocultarModalCarregamento() {
 
 
         {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
-        <table class="table table-striped">
+        <!--<table class="table table-striped">
           <thead>
                 <tr>
                     <th>probabilidade_predita</th>
@@ -207,7 +207,7 @@ function ocultarModalCarregamento() {
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table>-->
         {% else %}
                      
         {% endif %}
@@ -286,110 +286,68 @@ function ocultarModalCarregamento() {
   <!-- Template Main JS File -->
   <script src="static/assets/js/main.js"></script>
 
-<script>
- document.addEventListener("DOMContentLoaded", function(event) {
-  // Dados de exemplo
-  var data = [
-    { date: "01/01/2023", type: "CURA", percentage: 75 },
-    { date: "05/02/2023", type: "ÓBITO", percentage: 45 },
-    { date: "10/02/2023", type: "CURA", percentage: 60 },
-    // Adicione mais dados aqui
-  ];
-
-  // Preparar os dados para o gráfico
-  var labels = data.map(function(item) {
-    return item.date;
-  });
-
-  var datasets = [{
-    data: data.map(function(item) {
-      return item.percentage;
-    }),
-    backgroundColor: Chart.helpers
-      .color('rgb(54, 162, 235)')
-      .alpha(0.5)
-      .rgbString(),
-    borderColor: 'rgb(54, 162, 235)',
-    borderWidth: 1
-  }];
-
-  // Calcular diferenças entre as datas
-  var dateDifferences = [];
-  for (var i = 0; i < data.length - 1; i++) {
-    var date1 = moment(data[i].date, "DD/MM/YYYY");
-    var date2 = moment(data[i + 1].date, "DD/MM/YYYY");
-    var difference = date2.diff(date1, "days");
-    dateDifferences.push(difference);
-  }
-
-  // Configuração do gráfico
-  var ctx = document.getElementById("myChart").getContext("2d");
-  var chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: datasets
-    },
-    options: {
-      animation: {
-        duration: 1000,
-        easing: "easeInOutQuad"
+  <script>
+    // Dados de exemplo
+    const data = [
+    {% for paciente in predicoes_do_paciente_especifico %}
+      {
+        date: "{{ paciente.dataHora.strftime('%d/%m/%Y') }}",
+        type: {% if paciente.classificacao_predita == 1 %} "CURA" {% elif paciente.classificacao_predita == 3 %} "ÓBITO" {% endif %},
+        percentage: {{ paciente.probabilidade_predita }}
       },
-      legend: {
-        display: true,
-        labels: {
-          fontColor: "black"
+    {% endfor %}
+        // Adicione mais dados aqui...
+    ];
+
+    // Extrai as datas e os percentuais dos dados
+    const dates = data.map(item => item.data);
+    const percentages = data.map(item => item.percentual);
+
+    // Cria um array de cores para as barras
+    const colors = data.map(item => item.tipo === 'CURA' ? 'rgba(54, 162, 235, 0.8)' : 'rgba(255, 99, 132, 0.8)');
+
+    // Configurações do gráfico
+    const chartConfig = {
+        type: 'bar',
+        data: {
+            labels: dates,
+            datasets: [{
+                data: percentages,
+                backgroundColor: colors,
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: 'black'
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            }
         }
-      },
-      scales: {
-        xAxes: [{
-          gridLines: {
-            display: false
-          },
-          ticks: {
-            fontColor: "black"
-          }
-        }],
-        yAxes: [{
-          gridLines: {
-            color: "rgba(0, 0, 0, 0.1)",
-            zeroLineColor: "rgba(0, 0, 0, 0.1)"
-          },
-          ticks: {
-            beginAtZero: true,
-            max: 100,
-            fontColor: "black"
-          }
-        }]
-      }
-    }
-  });
+    };
 
-  // Adicionar linhas de diferença entre as datas
-  var scale = chart.scales["x-axis-0"];
-  var context = chart.ctx;
-  context.strokeStyle = "rgba(0, 0, 0, 0.5)";
-  context.lineWidth = 1;
-
-  for (var i = 0; i < dateDifferences.length; i++) {
-    var startX = scale.getPixelForTick(i) + scale.getPixelForTick(i + 1) / 2;
-    var endX = scale.getPixelForTick(i + 1);
-    var startY = chart.chartArea.top;
-    var endY = chart.chartArea.bottom;
-
-    context.beginPath();
-    context.moveTo(startX, startY);
-    context.lineTo(startX, endY);
-    context.lineTo(endX, endY);
-    context.stroke();
-
-    var differenceLabel = dateDifferences[i] + " dias";
-    context.fillStyle = "black";
-    context.fillText(differenceLabel, startX, endY + 20);
-  }
-});
-
-
+    // Renderiza o gráfico
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, chartConfig);
 </script>
 
 
