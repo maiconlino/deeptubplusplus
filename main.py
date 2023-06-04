@@ -461,7 +461,7 @@ def listar_evolucao_do_pacinete_medico(paciente_id):
     # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
         with pool.connect() as db_conn:
             # insert into database
-            select_Pacientes = sqlalchemy.text("SELECT * FROM tito_classificacoes WHERE id_tito_usuarios=:id_tito_usuarios AND id_tito_pacientes=:id_tito_pacientes")
+            select_Pacientes = sqlalchemy.text("SELECT * FROM tito_classificacoes WHERE id_tito_usuarios=:id_tito_usuarios AND id_tito_pacientes=:id_tito_pacientes ORDER BY dataHora")
             pacientes = db_conn.execute(select_Pacientes, parameters={"id_tito_usuarios": session['identificadorUsuario'], "id_tito_pacientes": paciente_id}).fetchall()
             # Do something with the results
             db_conn.commit()
@@ -490,7 +490,7 @@ def moduloacompanhamento():
     # validar se o id do paciente passado está relacionado ao profissional de saúde
     predicoes_do_paciente_especifico = listar_evolucao_do_pacinete_medico(paciente_id)
     if predicoes_do_paciente_especifico !="":
-         return render_template("moduloacompanhamento.html", predicoes_do_paciente_especifico=predicoes_do_paciente_especifico) 
+        return render_template("moduloacompanhamento.html", predicoes_do_paciente_especifico=predicoes_do_paciente_especifico) 
     #pegar as predições realizadas
     else:
         return render_template("moduloacompanhamento.html") 
