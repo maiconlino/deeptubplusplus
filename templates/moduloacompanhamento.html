@@ -56,7 +56,6 @@ function ocultarModalCarregamento() {
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     
 </head>
@@ -187,7 +186,7 @@ function ocultarModalCarregamento() {
       
         <h2 id="tituloFormulario">Gráfico de acompanhamento do paciente <strong>{{ paciente_nomecript }}</strong></h2>
         <canvas id="myChart"></canvas>
-        <script src="script.js"></script>
+
       
        
 
@@ -286,18 +285,22 @@ function ocultarModalCarregamento() {
   <!-- Template Main JS File -->
   <script src="static/assets/js/main.js"></script>
 
+
   <script>
     // Dados de exemplo
-    const data = [
-    {% for paciente in predicoes_do_paciente_especifico %}
+    
+const data = [
+
+{% for paciente in predicoes_do_paciente_especifico %}
       {
         data: "{{ paciente.dataHora.strftime('%d/%m/%Y') }}",
         tipo: {% if paciente.classificacao_predita == 1 %} "CURA" {% elif paciente.classificacao_predita == 3 %} "ÓBITO" {% endif %},
         percentual: {{ paciente.probabilidade_predita }}
       },
     {% endfor %}
-        // Adicione mais dados aqui...
-    ];
+
+    // Adicione mais dados aqui...
+];
 
     // Extrai as datas e os percentuais dos dados
     const dates = data.map(item => item.data);
@@ -349,6 +352,8 @@ function ocultarModalCarregamento() {
     const ctx = document.getElementById('chart').getContext('2d');
     new Chart(ctx, chartConfig);
 </script>
+
+
 
 
 </body>
