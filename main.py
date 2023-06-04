@@ -139,7 +139,9 @@ def processar_formulario():
 
     form_paciente = ""
     if 'form_paciente' in request.form:
-        form_paciente = form_paciente = dados['form_paciente']
+        form_paciente = dados['form_paciente']
+        form_paciente = form_paciente.split('|')[0]
+
 
 
     # Faça o processamento necessário com os dados
