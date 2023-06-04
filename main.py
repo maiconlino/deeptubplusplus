@@ -490,7 +490,7 @@ def moduloacompanhamento():
     # validar se o id do paciente passado está relacionado ao profissional de saúde
     predicoes_do_paciente_especifico = listar_evolucao_do_pacinete_medico(paciente_id)
     if predicoes_do_paciente_especifico !="":
-         return render_template("moduloacompanhamento.html", predicoes_do_paciente_especifico) 
+         return render_template("moduloacompanhamento.html", predicoes_do_paciente_especifico=predicoes_do_paciente_especifico) 
     #pegar as predições realizadas
     else:
         return render_template("moduloacompanhamento.html") 
