@@ -185,6 +185,7 @@ function ocultarModalCarregamento() {
     <div class="container" data-aos="fade-up">
       
         <h2 id="tituloFormulario">Gráfico de acompanhamento do paciente <strong>{{ paciente_nomecript }}</strong></h2>
+        <div id="legend"></div>
         <canvas id="chart"></canvas>
 
       
@@ -285,13 +286,10 @@ function ocultarModalCarregamento() {
   <!-- Template Main JS File -->
   <script src="static/assets/js/main.js"></script>
 
-
   <script>
     // Dados de exemplo
-    
-const data = [
-
-{% for paciente in predicoes_do_paciente_especifico %}
+    const data = [
+    {% for paciente in predicoes_do_paciente_especifico %}
       {
         data: "{{ paciente.dataHora.strftime('%d/%m/%Y') }}",
         tipo: {% if paciente.classificacao_predita == 1 %} "CURA" {% elif paciente.classificacao_predita == 3 %} "ÓBITO" {% endif %},
@@ -299,59 +297,79 @@ const data = [
       },
     {% endfor %}
 
-    // Adicione mais dados aqui...
-];
-
+      // Adicione mais dados aqui...
+      ];
+  
     // Extrai as datas e os percentuais dos dados
-    const dates = data.map(item => item.data);
-    const percentages = data.map(item => item.percentual);
-
+    const dates = data.map((item) => item.data);
+    const percentages = data.map((item) => item.percentual);
+  
     // Cria um array de cores para as barras
-    const colors = data.map(item => item.tipo === 'CURA' ? 'rgba(54, 162, 235, 0.8)' : 'rgba(255, 99, 132, 0.8)');
-
+    const colors = data.map((item) =>
+      item.tipo === "CURA" ? "rgba(54, 162, 235, 0.8)" : "rgba(255, 99, 132, 0.8)"
+    );
+  
     // Configurações do gráfico
     const chartConfig = {
-        type: 'bar',
-        data: {
-            labels: dates,
-            datasets: [{
-                data: percentages,
-                backgroundColor: colors,
-                borderWidth: 1,
-            }]
+      type: "bar",
+      data: {
+        labels: dates,
+        datasets: [
+          {
+            data: percentages,
+            backgroundColor: colors,
+            borderWidth: 1,
+            label: "",
+          },
+        ],
+      },
+      options: {
+        legend: {
+          display: false, // Oculta a legenda do próprio gráfico
         },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: 'black'
-                }
+        scales: {
+          x: {
+            grid: {
+              display: false,
             },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.1)'
-                    }
-                }
+          },
+          y: {
+            beginAtZero: true,
+            max: 100,
+            grid: {
+              color: "rgba(0, 0, 0, 0.1)",
             },
-            animation: {
-                duration: 1000,
-                easing: 'easeInOutQuart'
-            }
+          },
+        },
+        animation: {
+          duration: 1000,
+          easing: "easeInOutQuart",
+        },
+        plugins: {
+          legend: {
+            display: false // Oculta a legenda do próprio gráfico
+          }
         }
+      },
     };
-
+  
     // Renderiza o gráfico
-    const ctx = document.getElementById('chart').getContext('2d');
-    new Chart(ctx, chartConfig);
-</script>
+    const ctx = document.getElementById("chart").getContext("2d");
+    const chart = new Chart(ctx, chartConfig);
+  
+    // Adiciona as legendas manualmente
+    const legendContainer = document.getElementById("legend");
+    const legendHTML = `
+      <div style="font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; font-size: 14px;">
+        <span style="display:inline-block;width:10px;height:10px;background-color:rgba(54, 162, 235, 0.8);"></span>
+        <span style="margin-right: 10px;">CURA</span>
+        <span style="display:inline-block;width:10px;height:10px;background-color:rgba(255, 99, 132, 0.8);"></span>
+        <span>ÓBITO</span>
+      </div>
+    `;
+    legendContainer.innerHTML = legendHTML;
+  </script>
+
 
 
 
