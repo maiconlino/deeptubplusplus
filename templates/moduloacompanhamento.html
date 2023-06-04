@@ -286,24 +286,14 @@ function ocultarModalCarregamento() {
   <script src="static/assets/js/main.js"></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function(event) {
+ document.addEventListener("DOMContentLoaded", function(event) {
   // Dados de exemplo
   var data = [
-    {% for paciente in predicoes_do_paciente_especifico %}
-      {
-        date: "{{ paciente.dataHora.strftime('%d/%m/%Y') }}",
-        type: {% if paciente.classificacao_predita == 1 %} "CURA" {% elif paciente.classificacao_predita == 3 %} "ÓBITO" {% endif %},
-        percentage: {{ paciente.probabilidade_predita }}
-      },
-    {% endfor %}
+    { date: "01/01/2023", type: "CURA", percentage: 75 },
+    { date: "05/02/2023", type: "ÓBITO", percentage: 45 },
+    { date: "10/02/2023", type: "CURA", percentage: 60 },
     // Adicione mais dados aqui
   ];
-
-  // Configuração das cores
-  var colors = {
-    CURA: "blue",
-    ÓBITO: "red"
-  };
 
   // Preparar os dados para o gráfico
   var labels = data.map(function(item) {
@@ -314,10 +304,22 @@ function ocultarModalCarregamento() {
     data: data.map(function(item) {
       return item.percentage;
     }),
-    backgroundColor: data.map(function(item) {
-      return colors[item.type];
-    })
+    backgroundColor: Chart.helpers
+      .color('rgb(54, 162, 235)')
+      .alpha(0.5)
+      .rgbString(),
+    borderColor: 'rgb(54, 162, 235)',
+    borderWidth: 1
   }];
+
+  // Calcular diferenças entre as datas
+  var dateDifferences = [];
+  for (var i = 0; i < data.length - 1; i++) {
+    var date1 = moment(data[i].date, "DD/MM/YYYY");
+    var date2 = moment(data[i + 1].date, "DD/MM/YYYY");
+    var difference = date2.diff(date1, "days");
+    dateDifferences.push(difference);
+  }
 
   // Configuração do gráfico
   var ctx = document.getElementById("myChart").getContext("2d");
@@ -330,7 +332,7 @@ function ocultarModalCarregamento() {
     options: {
       animation: {
         duration: 1000,
-        easing: "easeInOutQuad" // Efeito de fade in
+        easing: "easeInOutQuad"
       },
       legend: {
         display: true,
@@ -361,7 +363,31 @@ function ocultarModalCarregamento() {
       }
     }
   });
+
+  // Adicionar linhas de diferença entre as datas
+  var scale = chart.scales["x-axis-0"];
+  var context = chart.ctx;
+  context.strokeStyle = "rgba(0, 0, 0, 0.5)";
+  context.lineWidth = 1;
+
+  for (var i = 0; i < dateDifferences.length; i++) {
+    var startX = scale.getPixelForTick(i) + scale.getPixelForTick(i + 1) / 2;
+    var endX = scale.getPixelForTick(i + 1);
+    var startY = chart.chartArea.top;
+    var endY = chart.chartArea.bottom;
+
+    context.beginPath();
+    context.moveTo(startX, startY);
+    context.lineTo(startX, endY);
+    context.lineTo(endX, endY);
+    context.stroke();
+
+    var differenceLabel = dateDifferences[i] + " dias";
+    context.fillStyle = "black";
+    context.fillText(differenceLabel, startX, endY + 20);
+  }
 });
+
 
 </script>
 
