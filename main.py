@@ -456,6 +456,25 @@ def pacientes_ver():
     #                     return render_template("pacientes_ver.html", pacientes=pacientes)
     # return render_template("index.html")
 
+def listar_evolucao_do_pacinete_medico(paciente_id):
+    if "identificadorUsuario" in session and session["identificadorUsuario"] != "":
+    # Aqui você pode verificar as credenciais do usuário em um banco de dados ou qualquer outra lógica desejada.
+        with pool.connect() as db_conn:
+            # insert into database
+            select_Pacientes = sqlalchemy.text("SELECT * FROM tito_classificacoes WHERE id_tito_usuarios=:id_tito_usuarios AND id_tito_pacientes=:id_tito_pacientes")
+            pacientes = db_conn.execute(select_Pacientes, parameters={"id_tito_usuarios": session['identificadorUsuario'], "id_tito_pacientes": paciente_id}).fetchall()
+            # Do something with the results
+            db_conn.commit()
+            try:
+                # Seu código aqui que pode gerar um TimeoutError
+                connector.close()  
+            except TimeoutError:
+                # Tratamento do erro TimeoutError
+                pass
+            return pacientes
+    else:
+         return ""
+
 @app.route('/acompanhamento')
 def acompanhamento(): 
     pacientes = listar_pacientes()
@@ -463,13 +482,18 @@ def acompanhamento():
         return render_template("pacientes_ver.html", pacientes=pacientes)
     else:
          return render_template("pacientes_ver.html")
+
     
 @app.route('/moduloacompanhamento')
 def moduloacompanhamento():
     paciente_id = request.args.get('pt')
     # validar se o id do paciente passado está relacionado ao profissional de saúde
+    predicoes_do_paciente_especifico = listar_evolucao_do_pacinete_medico(paciente_id)
+    if predicoes_do_paciente_especifico !="":
+         return render_template("moduloacompanhamento.html", predicoes_do_paciente_especifico) 
     #pegar as predições realizadas
-    return render_template("moduloacompanhamento.html") 
+    else:
+        return render_template("moduloacompanhamento.html") 
 
 @app.route('/cadastrarpaciente', methods=['GET', 'POST'])
 def cadastrarpaciente():

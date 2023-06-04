@@ -54,10 +54,25 @@ function ocultarModalCarregamento() {
     $('#loadingModal').modal('hide');
 }
 
-
-
     </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      #chartContainer {
+        position: relative;
+        width: 600px;
+        height: 400px;
+      }
+      #chart {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        transition: opacity 1s;
+      }
+      #chart.loaded {
+        opacity: 1;
+      }
+    </style>
     
 </head>
 
@@ -186,7 +201,29 @@ function ocultarModalCarregamento() {
     <div class="container" data-aos="fade-up">
       
         <h2 id="tituloFormulario">Gráfico.</h2>
-        
+        <div id="chartContainer">
+          <canvas id="chart"></canvas>
+        </div>
+      
+       
+
+
+
+        {% if session["nomeCompleto"] is defined and session["nomeCompleto"]!="" %}
+        <table class="table table-striped">
+          <thead>
+                <tr>
+                    <th>probabilidade_predita</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente in predicoes_do_paciente_especifico %}
+                <tr>
+                    <td>{{ paciente.classificacao_predita }} {{ paciente.probabilidade_predita }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
     </div>
   </section><!-- End About Us Section -->
@@ -321,6 +358,50 @@ function ocultarModalCarregamento() {
         });
     });
 </script>
+<script>
+  // Aqui você pode definir seus dados de exemplo
+  const data = [
+    { date: "01/01/2023", percentage: 20 },
+    { date: "05/02/2023", percentage: 50 },
+    // adicione mais dados aqui...
+  ];
+
+  // Função para carregar o gráfico com efeito de fade in
+  function loadChart() {
+    const chartCanvas = document.getElementById("chart");
+    const ctx = chartCanvas.getContext("2d");
+    const chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: data.map(entry => entry.date),
+        datasets: [{
+          label: "Percentual",
+          data: data.map(entry => entry.percentage),
+          backgroundColor: "rgba(255, 0, 0, 0.8)"
+        }]
+      },
+      options: {
+        animation: {
+          duration: 1000,
+          onComplete: () => {
+            chartCanvas.classList.add("loaded");
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  }
+
+  // Carrega o gráfico após o carregamento da página
+  window.addEventListener("DOMContentLoaded", loadChart);
+</script>
+
+
 </body>
 
 </html>
