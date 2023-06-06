@@ -16,6 +16,8 @@ import pymysql
 import bcrypt
 from concurrent.futures import TimeoutError
 import random
+from pandas_profiling import ProfileReport
+import zipfile
 
     #import mysql.connector
 
@@ -484,7 +486,32 @@ def acompanhamento():
         return render_template("pacientes_ver.html", pacientes=pacientes)
     else:
          return render_template("pacientes_ver.html")
+         
+@app.route('/visualizacao')
+def visualizacao(): 
+    # # Especifique o caminho para o arquivo ZIP
+    # caminho_arquivo_zip = 'dataset/SINAN-TB_Brazil_2001-01_2019-04v4.csv.zip'
 
+    # # Extrair o arquivo CSV do ZIP
+    # with zipfile.ZipFile(caminho_arquivo_zip, 'r') as zip_ref:
+    #     # Assumindo que o arquivo CSV está na raiz do ZIP
+    #     nome_arquivo_csv = zip_ref.namelist()[0]
+    #     zip_ref.extractall()
+
+    # # Carregar o arquivo CSV usando o pandas
+    # df = pd.read_csv(nome_arquivo_csv, ";")
+    #profile = ProfileReport(df)
+    #profile.to_file(output_file='relatorio.html')
+
+    # Ler o conteúdo do arquivo HTML
+    # with open('relatorio.html', 'r') as file:
+    #    relatorio_html = file.read()
+
+    # Renderizar o template com o conteúdo do relatório
+    return render_template('visualizacao.html')
+
+
+     
     
 @app.route('/moduloacompanhamento')
 def moduloacompanhamento():
